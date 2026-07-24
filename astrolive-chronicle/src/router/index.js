@@ -20,6 +20,12 @@ const routes = [
     meta: { label: 'Astrologers' },
   },
   {
+    path: '/astro-ai',
+    name: 'astro-ai',
+    component: () => import('../views/AstroAiView.vue'),
+    meta: { label: 'Astro AI' },
+  },
+  {
     path: '/live-chat',
     name: 'live-chat',
     component: () => import('../views/LiveConsultation.vue'),

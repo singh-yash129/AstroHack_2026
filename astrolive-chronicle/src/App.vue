@@ -2,7 +2,7 @@
   <div class="app-shell">
 
     <!-- ── Router View with fade transition ───────────────────────────── -->
-    <main class="app-content">
+    <main class="app-content" :class="{ 'app-content--no-nav': !showNav }">
       <RouterView v-slot="{ Component, route }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" :key="route.name" />
@@ -82,10 +82,21 @@ const IconStars = {
     ]),
 }
 
+/** Sparkle / AI icon → "Astro AI" */
+const IconSparkle = {
+  name: 'IconSparkle',
+  render: () =>
+    h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [
+      h('path', { d: 'M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z' }),
+      h('path', { d: 'M19 2l1 2.5L22.5 5.5 20 6.5 19 9l-1-2.5-2.5-1L18 4.5z', opacity: '0.7' }),
+    ]),
+}
+
 const navItems = [
-  { to: '/',            label: 'My Chronicle', icon: IconTimeline },
-  { to: '/importer',   label: 'AI Importer',  icon: IconUpload   },
-  { to: '/astrologers', label: 'Astrologers',  icon: IconStars    },
+  { to: '/',            label: 'Chronicle',   icon: IconTimeline },
+  { to: '/astro-ai',    label: 'Astro AI',    icon: IconSparkle  },
+  { to: '/importer',    label: 'AI Importer', icon: IconUpload   },
+  { to: '/astrologers', label: 'Astrologers', icon: IconStars    },
 ]
 </script>
 
@@ -105,6 +116,14 @@ const navItems = [
   flex: 1;
   overflow-y: auto;
   padding-bottom: 5rem;   /* clear of the 80px bottom nav */
+}
+
+.app-content--no-nav {
+  padding-bottom: 0 !important;
+  overflow: hidden !important;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
 }
 
 /* ── Bottom Navigation Bar ─────────────────────────────────────────── */
