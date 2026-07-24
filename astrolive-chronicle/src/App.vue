@@ -11,7 +11,7 @@
     </main>
 
     <!-- ── Fixed Bottom Navigation ────────────────────────────────────── -->
-    <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+    <nav v-if="showNav" class="bottom-nav" role="navigation" aria-label="Main navigation">
       <RouterLink
         v-for="item in navItems"
         :key="item.to"
@@ -42,6 +42,7 @@ import { RouterLink, RouterView, useRoute } from 'vue-router'
 
 const route = useRoute()
 const currentRoute = computed(() => route.path)
+const showNav = computed(() => !route.meta.hideNav)
 
 // ── SVG icon components (inline, no external deps) ──────────────────────
 

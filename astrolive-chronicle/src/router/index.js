@@ -19,6 +19,12 @@ const routes = [
     component: () => import('../views/AstrologersView.vue'),
     meta: { label: 'Astrologers' },
   },
+  {
+    path: '/live-chat',
+    name: 'live-chat',
+    component: () => import('../views/LiveConsultation.vue'),
+    meta: { label: 'Live Chat', hideNav: true },
+  },
 ]
 
 const router = createRouter({

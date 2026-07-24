@@ -131,25 +131,32 @@
 
             <!-- Price + Book button -->
             <div class="ast-footer">
+              <!-- Left: price -->
               <div class="ast-price">
                 <span class="price-from">from</span>
                 <span class="price-val">${{ ast.price }}</span>
                 <span class="price-unit">/ 10 min</span>
-                <span v-if="ast.isSurge" class="price-surge-badge">Surge</span>
               </div>
-              <button
-                class="book-btn"
-                :class="{ 'book-btn--surge': ast.isSurge }"
-                @click="openSheet(ast)"
-                :aria-label="`Book consultation with ${ast.name}`"
-              >
-                <svg class="book-btn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="3" y="4" width="14" height="14" rx="2"/>
-                  <path d="M7 2v4M13 2v4M3 9h14"/>
-                  <path d="M7 13h.01M10 13h.01M13 13h.01"/>
-                </svg>
-                Book Consultation
-              </button>
+
+              <!-- Right: surge label stacked above book button -->
+              <div class="ast-footer-right">
+                <span v-if="ast.isSurge" class="price-surge-badge">
+                  🔥 Surge Pricing
+                </span>
+                <button
+                  class="book-btn"
+                  :class="{ 'book-btn--surge': ast.isSurge }"
+                  @click="openSheet(ast)"
+                  :aria-label="`Book consultation with ${ast.name}`"
+                >
+                  <svg class="book-btn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="14" height="14" rx="2"/>
+                    <path d="M7 2v4M13 2v4M3 9h14"/>
+                    <path d="M7 13h.01M10 13h.01M13 13h.01"/>
+                  </svg>
+                  Book Consultation
+                </button>
+              </div>
             </div>
 
           </div>
@@ -184,8 +191,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import ConsultationBottomSheet from '../components/ConsultationBottomSheet.vue'
 import ToastNotification from '../components/ToastNotification.vue'
+
+const router = useRouter()
 
 // ── Astrologer dataset — sorted descending by accuracyScore ───────────────
 const astrologers = [
@@ -298,10 +308,12 @@ const showToast     = ref(false)
 const toastTitle    = ref('')
 const toastSubtitle = ref('')
 
-function handleBooked({ astrologer, mins, price }) {
-  toastTitle.value    = `📅 Session Confirmed!`
-  toastSubtitle.value = `${astrologer.name} · ${mins} min · $${price} · Check your inbox ✨`
-  showToast.value     = true
+function handleBooked({ astrologer }) {
+  sheetOpen.value = false
+  // Brief pause, then launch the live chat session
+  setTimeout(() => {
+    router.push({ name: 'live-chat', query: { astrologer: astrologer.name } })
+  }, 300)
 }
 </script>
 
@@ -694,12 +706,22 @@ function handleBooked({ astrologer, mins, price }) {
   font-weight: 500;
 }
 
-/* ── Card footer ─────────────────────────────────────────────────────── */
+/* ── Card footer ───────────────────────────────────────────── */
 .ast-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   margin-top: 0.1rem;
+}
+
+/* Right column: surge pill stacked above book button */
+.ast-footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  flex-shrink: 0;
 }
 
 /* Price */
@@ -726,13 +748,22 @@ function handleBooked({ astrologer, mins, price }) {
 }
 
 .price-surge-badge {
-  font-size: 0.58rem; font-weight: 700;
-  padding: 0.12rem 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6rem; font-weight: 700;
+  padding: 0.15rem 0.5rem;
   border-radius: 999px;
-  background: rgba(251,115,0,0.2);
+  background: rgba(251,115,0,0.18);
   border: 1px solid rgba(251,115,0,0.4);
   color: #fb923c;
-  margin-left: 0.15rem;
+  white-space: nowrap;
+  animation: surge-badge-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes surge-badge-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
 }
 
 /* Book button */
