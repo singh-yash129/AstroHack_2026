@@ -9,24 +9,34 @@
       </div>
 
       <div class="ai-title-box">
-        <div class="ai-badge">
-          <span class="sparkle">✦</span> ASTRO AI 2.0
-        </div>
+        <span class="ai-badge"><span class="sparkle">✦</span> ASTRO AI 2.0</span>
         <h1 class="ai-title">Cosmic Intelligence</h1>
-        <p class="ai-subtitle">Ask anything about horoscopes, transits, Kundli &amp; remedies</p>
+        <p class="ai-subtitle">Ask horoscopes, transits, Kundli &amp; remedies</p>
       </div>
+
+      <!-- Astro Live Voice Mode Button (Right Side) -->
+      <button class="live-voice-trigger" @click="startLiveVoiceMode" title="Start Astro Live Voice Session">
+        <span class="red-live-dot" />
+        <svg class="wave-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round">
+          <line x1="4" y1="10" x2="4" y2="14" />
+          <line x1="8" y1="6" x2="8" y2="18" />
+          <line x1="12" y1="3" x2="12" y2="21" />
+          <line x1="16" y1="7" x2="16" y2="17" />
+          <line x1="20" y1="10" x2="20" y2="14" />
+        </svg>
+        <span>Astro Live</span>
+      </button>
     </header>
 
-    <!-- ── Topic Suggestions Grid ───────────────────────────────────── -->
+    <!-- ── Topic Suggestions Horizontal Scroll Container ────────────── -->
     <div v-if="messages.length === 0" class="suggestions-section">
-      <p class="section-label">⚡ QUICK ASTROLOGICAL QUERIES</p>
-      <div class="suggestions-grid">
-        <button
-          v-for="s in SUGGESTIONS"
-          :key="s.title"
-          class="suggestion-card"
-          @click="askQuestion(s.query)"
-        >
+      <div class="section-header-row">
+        <p class="section-label">⚡ QUICK ASTROLOGICAL QUERIES</p>
+        <span class="scroll-hint">Swipe &rarr;</span>
+      </div>
+      <div class="suggestions-scroll-container">
+        <button v-for="s in SUGGESTIONS" :key="s.title" class="suggestion-card" @click="askQuestion(s.query)">
           <span class="sug-icon">{{ s.icon }}</span>
           <div class="sug-info">
             <span class="sug-title">{{ s.title }}</span>
@@ -39,22 +49,16 @@
     <!-- ── Chat Messages Stream ──────────────────────────────────────── -->
     <div class="chat-messages" ref="messagesContainer">
       <TransitionGroup name="bubble">
-        <div
-          v-for="msg in messages"
-          :key="msg.id"
-          class="msg-row"
-          :class="msg.sender === 'user' ? 'msg-row--user' : 'msg-row--ai'"
-        >
+        <div v-for="msg in messages" :key="msg.id" class="msg-row"
+          :class="msg.sender === 'user' ? 'msg-row--user' : 'msg-row--ai'">
           <!-- Avatar -->
-          <div v-if="msg.sender === 'ai'" class="msg-avatar">
-            ✨
-          </div>
+          <div v-if="msg.sender === 'ai'" class="msg-avatar">✨</div>
 
           <!-- Bubble -->
           <div class="msg-bubble" :class="msg.sender === 'user' ? 'bubble--user' : 'bubble--ai'">
             <div class="msg-content" v-html="formatMarkdown(msg.text)" />
 
-            <!-- Planetary breakdown pill if present -->
+            <!-- Planetary breakdown pill -->
             <div v-if="msg.planetaryInsight" class="planetary-card">
               <div class="planet-row">
                 <span class="planet-badge">🪐 {{ msg.planetaryInsight.planet }}</span>
@@ -63,18 +67,23 @@
               <p class="planet-detail">{{ msg.planetaryInsight.detail }}</p>
             </div>
 
-            <!-- Lock to Chronicle Button for AI Predictions -->
             <button
-              v-if="msg.sender === 'ai' &amp;&amp; msg.prediction"
+              v-if="msg.sender === 'ai' && msg.prediction"
               class="pin-chronicle-btn"
               :class="{ 'pinned': msg.isPinned }"
               @click="pinToChronicle(msg)"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                <rect x="3" y="11" width="18" height="11" rx="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
               <span>{{ msg.isPinned ? 'Saved to Chronicle! ✨' : 'Save Prediction to Chronicle' }}</span>
+            </button>
+
+            <!-- Speaker TTS Button -->
+            <button v-if="msg.sender === 'ai'" class="speak-msg-btn" @click="speakText(msg.text)"
+              title="Listen to AI voice">
+              🔊 Read aloud
             </button>
 
             <span class="msg-time">{{ msg.time }}</span>
@@ -95,56 +104,36 @@
 
     <!-- ── Chat & Voice Input Bar ───────────────────────────────────── -->
     <div class="input-container">
-
       <!-- Quick prompts horizontal scroll -->
       <div class="quick-prompts-bar">
-        <button
-          v-for="chip in PROMPT_CHIPS"
-          :key="chip"
-          class="prompt-chip"
-          @click="askQuestion(chip)"
-        >
+        <button v-for="chip in PROMPT_CHIPS" :key="chip" class="prompt-chip" @click="askQuestion(chip)">
           {{ chip }}
         </button>
       </div>
 
       <!-- Main Input Controls -->
       <form class="input-form" @submit.prevent="handleSend">
-        <input
-          ref="inputField"
-          v-model="inputQuery"
-          type="text"
-          class="chat-input"
-          placeholder="Ask Astro AI about love, career, remedies, horoscopes..."
-          :disabled="isTyping"
-          autocomplete="off"
-        />
+        <input ref="inputField" v-model="inputQuery" type="text" class="chat-input"
+          placeholder="Ask Astro AI about horoscopes, remedies, transits..." :disabled="isTyping" autocomplete="off" />
 
-        <!-- Voice typing button -->
-        <button
-          type="button"
-          class="icon-btn voice-btn"
-          :class="{ 'listening': isListening }"
-          @click="toggleVoiceInput"
-          :title="isListening ? 'Listening... Speak now' : 'Voice Input'"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-            <line x1="12" y1="19" x2="12" y2="23"/>
-            <line x1="8" y1="23" x2="16" y2="23"/>
+        <!-- Voice typing toggle button -->
+        <button type="button" class="icon-btn voice-btn" :class="{ 'listening': isListening }" @click="toggleVoiceInput"
+          :title="isListening ? 'Listening... Speak now' : 'Voice Input'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" y1="19" x2="12" y2="23" />
+            <line x1="8" y1="23" x2="16" y2="23" />
           </svg>
         </button>
 
         <!-- Send button -->
-        <button
-          type="submit"
-          class="icon-btn send-btn"
-          :disabled="!inputQuery.trim() || isTyping"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13"/>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        <button type="submit" class="icon-btn send-btn" :disabled="!inputQuery.trim() || isTyping">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9 22 2" />
           </svg>
         </button>
       </form>
@@ -156,6 +145,61 @@
       </div>
     </div>
 
+    <!-- ═════════════════════════════════════════════════════════════════
+         Astro LIVE VOICE MODE OVERLAY (Full-screen interactive prototype)
+    ═════════════════════════════════════════════════════════════════ -->
+    <Teleport to="body">
+      <Transition name="live-fade">
+        <div v-if="liveVoiceOpen" class="live-voice-overlay">
+          <!-- Background stars & blur -->
+          <div class="live-bg-glow" />
+
+          <!-- Header -->
+          <header class="live-header">
+            <div class="live-status-badge">
+              <span class="live-dot" /> Astro LIVE ASTRO AI
+            </div>
+            <button class="live-close-btn" @click="closeLiveVoiceMode" aria-label="End Live Session">
+              ✕
+            </button>
+          </header>
+
+          <!-- Dynamic Audio Visualization Orb -->
+          <div class="live-orb-container">
+            <div class="live-orb" :class="liveState">
+              <div class="orb-core">✨</div>
+              <div class="orb-wave wave-1" />
+              <div class="orb-wave wave-2" />
+              <div class="orb-wave wave-3" />
+            </div>
+            <p class="live-state-label">{{ liveStateText }}</p>
+          </div>
+
+          <!-- Realtime Speech Transcript Box -->
+          <div class="live-transcript-box">
+            <p v-if="liveUserTranscript" class="live-user-speech">
+              <span class="speaker-tag">You:</span> "{{ liveUserTranscript }}"
+            </p>
+            <p v-if="liveAiSpeech" class="live-ai-speech">
+              <span class="speaker-tag ai-tag">Astro AI:</span> {{ liveAiSpeech }}
+            </p>
+          </div>
+
+          <!-- Controls Bar -->
+          <footer class="live-controls">
+            <button class="live-action-btn mic" :class="{ muted: isLiveMuted }" @click="toggleLiveMute">
+              <span v-if="!isLiveMuted">🎙️ Mute</span>
+              <span v-else>🔇 Unmute</span>
+            </button>
+
+            <button class="live-end-btn" @click="closeLiveVoiceMode">
+              End Live Session
+            </button>
+          </footer>
+        </div>
+      </Transition>
+    </Teleport>
+
   </section>
 </template>
 
@@ -165,12 +209,13 @@ import { useChronicleStore } from '../stores/chronicle.js'
 
 const chronicleStore = useChronicleStore()
 
-// ── Data & Templates ───────────────────────────────────────────────────────
+// ── Data ───────────────────────────────────────────────────────────────────
 const SUGGESTIONS = [
   { icon: '🪐', title: 'Daily Transit Forecast', desc: 'How do today’s moon & planetary aspects affect me?', query: 'What are the dominant planetary transits today and their spiritual guidance?' },
-  { icon: '💖', title: 'Love & Relationship Astrology', desc: 'Zodiac synastry, soulmates & venus cycles', query: 'What does my Venus and 7th House alignment say about my current relationship cycle?' },
-  { icon: '💎', title: 'Gemstone & Remedial Advice', desc: 'Mantra, gemstones & cosmic balancing', query: 'Which gemstone and Vedic remedies strengthen my career & financial growth?' },
+  { icon: '💖', title: 'Love & Zodiac Synastry', desc: 'Venus cycles, soulmates & house alignment', query: 'What does my Venus and 7th House alignment say about my current relationship cycle?' },
+  { icon: '💎', title: 'Gemstone & Remedies', desc: 'Mantra, gemstones & cosmic balancing', query: 'Which gemstone and Vedic remedies strengthen my career & financial growth?' },
   { icon: '💼', title: 'Career & Wealth Timing', desc: 'Dasha periods & Saturn 10th House transits', query: 'When is my next major career promotion or financial breakthrough window?' },
+  { icon: '🔮', title: 'Kundli & Dasha Reading', desc: 'Deep planetary periods & destiny cycles', query: 'Analyze my current Mahadasha period and key life events for 2026.' },
 ]
 
 const PROMPT_CHIPS = [
@@ -179,6 +224,7 @@ const PROMPT_CHIPS = [
   '🔮 Kundli Dasha check',
   '💎 Lucky Gemstone',
   '💼 Career Transit 2026',
+  '💑 Love Synastry',
 ]
 
 // ── State ──────────────────────────────────────────────────────────────────
@@ -191,7 +237,15 @@ const scrollAnchor = ref(null)
 
 let recognition = null
 
-// ── Speech Recognition setup ──────────────────────────────────────────────
+// Astro Live Voice State
+const liveVoiceOpen = ref(false)
+const liveState = ref('listening') // 'listening' | 'thinking' | 'speaking'
+const liveStateText = ref('Listening… Speak to Astro AI')
+const liveUserTranscript = ref('')
+const liveAiSpeech = ref('')
+const isLiveMuted = ref(false)
+
+// ── Speech Recognition ─────────────────────────────────────────────────────
 function toggleVoiceInput() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
   if (!SpeechRecognition) {
@@ -209,26 +263,103 @@ function toggleVoiceInput() {
   recognition.lang = 'en-US'
   recognition.interimResults = true
 
-  recognition.onstart = () => {
-    isListening.value = true
-  }
-
+  recognition.onstart = () => { isListening.value = true }
   recognition.onresult = (event) => {
-    const transcript = Array.from(event.results)
-      .map(result => result[0].transcript)
-      .join('')
+    const transcript = Array.from(event.results).map(r => r[0].transcript).join('')
     inputQuery.value = transcript
   }
+  recognition.onerror = () => { isListening.value = false }
+  recognition.onend = () => { isListening.value = false }
 
-  recognition.onerror = () => {
-    isListening.value = false
+  recognition.start()
+}
+
+// ── Text To Speech ─────────────────────────────────────────────────────────
+function speakText(text) {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+  window.speechSynthesis.cancel()
+  const cleanText = text.replace(/[*#_~]/g, '')
+  const utterance = new SpeechSynthesisUtterance(cleanText)
+  utterance.rate = 1.0
+  utterance.pitch = 1.0
+  window.speechSynthesis.speak(utterance)
+}
+
+// ── Astro Live Voice Mode Prototype ───────────────────────────────────────
+function startLiveVoiceMode() {
+  liveVoiceOpen.value = true
+  liveState.value = 'listening'
+  liveStateText.value = 'Listening… Speak your question to Astro AI'
+  liveUserTranscript.value = ''
+  liveAiSpeech.value = ''
+
+  startLiveListening()
+}
+
+function closeLiveVoiceMode() {
+  liveVoiceOpen.value = false
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    window.speechSynthesis.cancel()
+  }
+  if (recognition) recognition.stop()
+}
+
+function toggleLiveMute() {
+  isLiveMuted.value = !isLiveMuted.value
+  if (isLiveMuted.value) {
+    liveStateText.value = 'Microphone Muted'
+    if (recognition) recognition.stop()
+  } else {
+    liveStateText.value = 'Listening… Speak your question'
+    startLiveListening()
+  }
+}
+
+function startLiveListening() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+  if (!SpeechRecognition) return
+
+  recognition = new SpeechRecognition()
+  recognition.lang = 'en-US'
+  recognition.interimResults = true
+
+  recognition.onresult = (e) => {
+    const transcript = Array.from(e.results).map(r => r[0].transcript).join('')
+    liveUserTranscript.value = transcript
   }
 
   recognition.onend = () => {
-    isListening.value = false
+    if (!liveVoiceOpen.value || isLiveMuted.value) return
+    if (liveUserTranscript.value.trim()) {
+      processLiveQuery(liveUserTranscript.value)
+    } else {
+      setTimeout(startLiveListening, 1000)
+    }
   }
 
   recognition.start()
+}
+
+function processLiveQuery(userText) {
+  liveState.value = 'thinking'
+  liveStateText.value = 'Synthesizing cosmic voice response…'
+
+  setTimeout(() => {
+    const respData = generateAstroAiResponse(userText)
+    liveState.value = 'speaking'
+    liveStateText.value = 'Astro AI Speaking…'
+    liveAiSpeech.value = respData.text.replace(/\*\*(.*?)\*\*/g, '$1')
+
+    speakText(liveAiSpeech.value)
+
+    setTimeout(() => {
+      if (!liveVoiceOpen.value) return
+      liveState.value = 'listening'
+      liveStateText.value = 'Listening… Ask follow-up question'
+      liveUserTranscript.value = ''
+      startLiveListening()
+    }, 4500)
+  }, 1600)
 }
 
 // ── Message Handlers ───────────────────────────────────────────────────────
@@ -241,7 +372,6 @@ async function handleSend() {
   const text = inputQuery.value.trim()
   if (!text || isTyping.value) return
 
-  // Add User Message
   messages.value.push({
     id: Date.now(),
     sender: 'user',
@@ -252,7 +382,6 @@ async function handleSend() {
   inputQuery.value = ''
   scrollToBottom()
 
-  // AI Response processing
   isTyping.value = true
 
   setTimeout(() => {
@@ -270,7 +399,7 @@ async function handleSend() {
     })
 
     scrollToBottom()
-  }, 1800)
+  }, 1600)
 }
 
 function pinToChronicle(msg) {
@@ -297,7 +426,7 @@ function generateAstroAiResponse(query) {
 
   if (q.includes('love') || q.includes('relationship') || q.includes('venus') || q.includes('soulmate')) {
     return {
-      text: "Based on natal synastry principles, **Venus is in strong aspect with Jupiter**! 💖 Your emotional receptivity is heightened. This is an ideal cycle for deepening romantic trust and releasing past karmic attachments.",
+      text: "Based on synastry principles, **Venus is in strong aspect with Jupiter**! 💖 Your emotional receptivity is heightened. This is an ideal cycle for deepening romantic trust and releasing past karmic attachments.",
       planetaryInsight: {
         planet: 'Venus in 7th House',
         house: 7,
@@ -316,7 +445,7 @@ function generateAstroAiResponse(query) {
 
   if (q.includes('career') || q.includes('job') || q.includes('promot') || q.includes('money') || q.includes('business')) {
     return {
-      text: "The stars reveal a high-energy **Saturn Trine** impacting your 10th House of vocation! 💼 Strategic discipline applied over the next month will yield massive financial alignment. Avoid impulsive contracts during retrograde shifts.",
+      text: "The stars reveal a high-energy **Saturn Trine** impacting your 10th House of vocation! 💼 Strategic discipline applied over the next month will yield massive financial alignment.",
       planetaryInsight: {
         planet: 'Saturn in 10th House',
         house: 10,
@@ -326,7 +455,7 @@ function generateAstroAiResponse(query) {
         category: 'Career',
         icon: '🚀',
         title: 'Saturn 10th House: Major Career Elevation',
-        description: 'Strategic leadership demonstrated between now and the next quarter guarantees promotion and financial expansion.',
+        description: 'Strategic leadership demonstrated between now and next quarter guarantees promotion and financial expansion.',
         timeframe: 'Sep – Nov 2026',
         planet: 'Saturn / Sun',
       }
@@ -335,7 +464,7 @@ function generateAstroAiResponse(query) {
 
   if (q.includes('gemstone') || q.includes('remedy') || q.includes('mantra')) {
     return {
-      text: "To balance your ruling planet's aura, **Yellow Sapphire (Pukhraj)** or **Blue Sapphire** (depending on Saturn placement) strengthens focus! 💎 Complement this by chanting the *Om Namah Shivaya* mantra 108 times at sunrise.",
+      text: "To balance your ruling planet's aura, **Yellow Sapphire (Pukhraj)** strengthens wisdom! 💎 Complement this by chanting the *Om Namah Shivaya* mantra 108 times at sunrise.",
       planetaryInsight: {
         planet: 'Jupiter & Mercury Balance',
         house: 5,
@@ -345,9 +474,8 @@ function generateAstroAiResponse(query) {
     }
   }
 
-  // General fallback response
   return {
-    text: `Analyzing your cosmic query: *"${query}"*… ✨ The current celestial alignment indicates that your **Sun sign and Ascendant lord** are in strong harmony! Trust your inner intuition as transiting planets align in your house of transformation.`,
+    text: `Analyzing your cosmic query: *"${query}"*… ✨ Current celestial alignment indicates your **Sun sign and Ascendant lord** are in strong harmony! Trust your intuition as transiting planets align in your house of transformation.`,
     planetaryInsight: {
       planet: 'Solar & Lunar Resonance',
       house: 1,
@@ -385,6 +513,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (recognition) recognition.abort()
+  if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    window.speechSynthesis.cancel()
+  }
 })
 </script>
 
@@ -408,7 +539,7 @@ onUnmounted(() => {
   border: 1px solid rgba(147, 51, 234, 0.3);
   border-radius: 1.25rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(168, 85, 247, 0.15);
-  margin-bottom: 1rem;
+  margin-bottom: 0.85rem;
 }
 
 .ai-avatar-ring {
@@ -423,8 +554,13 @@ onUnmounted(() => {
 }
 
 @keyframes rotateGlow {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .ai-avatar {
@@ -453,13 +589,15 @@ onUnmounted(() => {
 .ai-title-box {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 0;
 }
 
 .ai-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   color: #fbbf24;
@@ -475,6 +613,76 @@ onUnmounted(() => {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
+/* Astro Live Voice Mode Trigger - Placed on the Right Side */
+.live-voice-trigger {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(56, 189, 248, 0.25) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.live-voice-trigger:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.35) 0%, rgba(56, 189, 248, 0.4) 100%);
+  border-color: rgba(239, 68, 68, 0.7);
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.45);
+  transform: translateY(-1px);
+}
+
+.red-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+  animation: redPulse 1.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes redPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.4);
+    opacity: 0.6;
+  }
+}
+
+.wave-svg {
+  width: 14px;
+  height: 14px;
+  color: #38bdf8;
+  flex-shrink: 0;
+  animation: waveBars 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes waveBars {
+  0% {
+    transform: scaleY(0.85);
+  }
+
+  100% {
+    transform: scaleY(1.15);
+  }
+}
+
 .ai-title {
   font-family: 'Outfit', sans-serif;
   font-size: 1.15rem;
@@ -484,28 +692,49 @@ onUnmounted(() => {
 }
 
 .ai-subtitle {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: rgba(226, 232, 240, 0.6);
   margin-top: 0.15rem;
 }
 
-/* ── Suggestions Section ─────────────────────────────────────────── */
+/* ── Suggestions Section (Smooth Horizontal Scrollable) ─────────── */
 .suggestions-section {
-  margin-top: 0.5rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.45rem;
 }
 
 .section-label {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 700;
   color: rgba(168, 85, 247, 0.8);
   letter-spacing: 0.08em;
-  margin-bottom: 0.75rem;
 }
 
-.suggestions-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.scroll-hint {
+  font-size: 0.6rem;
+  color: rgba(226, 232, 240, 0.4);
+}
+
+/* Horizontal Scroll Container */
+.suggestions-scroll-container {
+  display: flex;
   gap: 0.65rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  scrollbar-width: none;
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
+}
+
+.suggestions-scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
 .suggestion-card {
@@ -513,8 +742,10 @@ onUnmounted(() => {
   align-items: flex-start;
   gap: 0.5rem;
   padding: 0.75rem;
-  background: rgba(30, 27, 75, 0.4);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  min-width: 210px;
+  flex-shrink: 0;
+  background: rgba(30, 27, 75, 0.45);
+  border: 1px solid rgba(139, 92, 246, 0.25);
   border-radius: 0.85rem;
   cursor: pointer;
   text-align: left;
@@ -555,7 +786,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
   overflow-y: auto;
 }
 
@@ -632,7 +863,8 @@ onUnmounted(() => {
   margin-bottom: 0.25rem;
 }
 
-.planet-badge, .house-badge {
+.planet-badge,
+.house-badge {
   font-size: 0.65rem;
   font-weight: 700;
   padding: 0.1rem 0.4rem;
@@ -684,33 +916,15 @@ onUnmounted(() => {
   color: #4ade80;
 }
 
-/* Typing Indicator */
-.bubble--typing {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.typing-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #c084fc;
-  animation: typingBounce 1.2s infinite ease-in-out;
-}
-
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes typingBounce {
-  0%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-4px); }
-}
-
-.typing-text {
-  font-size: 0.7rem;
-  color: rgba(226, 232, 240, 0.5);
-  margin-left: 0.2rem;
+.speak-msg-btn {
+  background: transparent;
+  border: none;
+  color: rgba(168, 85, 247, 0.8);
+  font-size: 0.65rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.35rem;
+  display: inline-block;
 }
 
 /* ── Input Bar Container ─────────────────────────────────────────── */
@@ -731,11 +945,13 @@ onUnmounted(() => {
 
 .quick-prompts-bar {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.45rem;
   overflow-x: auto;
   padding-bottom: 0.4rem;
   margin-bottom: 0.4rem;
   scrollbar-width: none;
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
 }
 
 .quick-prompts-bar::-webkit-scrollbar {
@@ -752,6 +968,7 @@ onUnmounted(() => {
   border-radius: 999px;
   color: #c084fc;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .input-form {
@@ -808,9 +1025,17 @@ onUnmounted(() => {
 }
 
 @keyframes pulseMic {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .send-btn {
@@ -842,12 +1067,257 @@ onUnmounted(() => {
   animation: pulse 1s infinite;
 }
 
-/* Animations */
-.bubble-enter-active {
-  transition: all 0.3s ease-out;
+/* ═════════════════════════════════════════════════════════════════
+   Astro LIVE VOICE MODE OVERLAY STYLING
+═════════════════════════════════════════════════════════════════ */
+.live-voice-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #030712;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem 1.25rem 2.5rem 1.25rem;
+  box-sizing: border-box;
 }
-.bubble-enter-from {
+
+.live-bg-glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(168, 85, 247, 0.15) 50%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.live-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.live-status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: pulse 1s infinite;
+}
+
+.live-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* Orb & Wave Visualization */
+.live-orb-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  margin-top: 2rem;
+}
+
+.live-orb {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.orb-core {
+  position: relative;
+  z-index: 5;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #38bdf8 0%, #a855f7 60%, #4c1d95 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  box-shadow: 0 0 40px rgba(56, 189, 248, 0.6);
+}
+
+.orb-wave {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(56, 189, 248, 0.5);
+  animation: wavePulse 2.5s infinite ease-out;
+}
+
+.wave-1 {
+  width: 110px;
+  height: 110px;
+  animation-delay: 0s;
+}
+
+.wave-2 {
+  width: 140px;
+  height: 140px;
+  animation-delay: 0.6s;
+}
+
+.wave-3 {
+  width: 170px;
+  height: 170px;
+  animation-delay: 1.2s;
+}
+
+.live-orb.listening .orb-wave {
+  border-color: rgba(56, 189, 248, 0.6);
+}
+
+.live-orb.speaking .orb-core {
+  animation: floatOrb 1.5s infinite ease-in-out;
+  box-shadow: 0 0 60px rgba(168, 85, 247, 0.8);
+}
+
+@keyframes wavePulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes floatOrb {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.live-state-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f3f4f6;
+  text-align: center;
+}
+
+/* Live Transcript Box */
+.live-transcript-box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 1rem;
+  padding: 1rem;
+  min-height: 90px;
+  max-height: 140px;
+  overflow-y: auto;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.speaker-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #38bdf8;
+  margin-right: 0.3rem;
+}
+
+.speaker-tag.ai-tag {
+  color: #fbbf24;
+}
+
+.live-user-speech {
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+.live-ai-speech {
+  font-size: 0.85rem;
+  color: #fbbf24;
+  line-height: 1.4;
+}
+
+/* Controls */
+.live-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  z-index: 10;
+}
+
+.live-action-btn {
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.live-action-btn.muted {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.live-end-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+}
+
+/* Fade animation for Live overlay */
+.live-fade-enter-active,
+.live-fade-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.live-fade-enter-from,
+.live-fade-leave-to {
   opacity: 0;
-  transform: translateY(10px);
 }
 </style>
