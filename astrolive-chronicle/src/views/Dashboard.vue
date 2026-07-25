@@ -4,16 +4,12 @@
     <!-- ══════════════════════════════════════════════════════════════════
          HEADER — matches other page headers
     ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Page header — same as ChronicleView -->
     <div class="page-header">
       <div class="header-icon">🌌</div>
-      <div class="header-text">
+      <div>
         <h1 class="page-title">Dashboard</h1>
         <p class="page-subtitle">Your cosmic command centre</p>
-      </div>
-      <!-- Live status dot -->
-      <div class="header-live-badge">
-        <span class="live-pulse-dot" />
-        <span class="live-text">Live</span>
       </div>
     </div>
 
@@ -270,78 +266,7 @@ const RECENT_ACTIVITY = [
   padding: 0 0 1rem 0;
 }
 
-/* ── Page Header (matches Astrologers / other views) ────────────────── */
-.page-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1.1rem 1rem 0.9rem 1rem;
-  background: linear-gradient(
-    135deg,
-    rgba(109, 40, 217, 0.12) 0%,
-    rgba(251, 191, 36, 0.06) 100%
-  );
-  border-bottom: 1px solid rgba(251, 191, 36, 0.1);
-}
-.header-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(109,40,217,0.4), rgba(251,191,36,0.25));
-  border: 1px solid rgba(251,191,36,0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-  flex-shrink: 0;
-}
-.header-text {
-  flex: 1;
-  min-width: 0;
-}
-.page-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: #f1f5f9;
-  margin: 0;
-  letter-spacing: -0.01em;
-}
-.page-subtitle {
-  font-size: 0.7rem;
-  color: rgba(203, 213, 225, 0.55);
-  margin: 0;
-  font-weight: 500;
-}
-.header-live-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  border-radius: 99px;
-  padding: 4px 10px 4px 7px;
-  flex-shrink: 0;
-}
-.live-pulse-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #22c55e;
-  animation: livePulse 1.6s ease-in-out infinite;
-  display: inline-block;
-}
-.live-text {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: #22c55e;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-@keyframes livePulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.75); }
-}
+
 
 /* ── Section Label Row ──────────────────────────────────────────────── */
 .section-label-row {

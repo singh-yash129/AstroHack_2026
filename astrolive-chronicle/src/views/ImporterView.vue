@@ -320,6 +320,13 @@ onUnmounted(() => timers.forEach(clearTimeout))
   align-items: center;
 }
 
+/* Header must be full-width and left-aligned despite align-items:center parent */
+.importer-view :deep(.page-header),
+.page-header {
+  align-self: stretch;
+  width: 100%;
+}
+
 /* ══════════════════════════════════════════════════════════════════════
    IDLE STATE STYLES
 ══════════════════════════════════════════════════════════════════════ */

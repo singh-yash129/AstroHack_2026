@@ -72,70 +72,86 @@
       </button>
     </div>
 
-    <!-- Planet Placement Details Modal / Bottom Sheet -->
+    <!-- Planet Placement Bottom Sheet -->
     <Teleport to="body">
-      <Transition name="modal-fade">
-        <div v-if="selectedPlanet" class="fixed inset-0 z-[999] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/80 backdrop-blur-sm" @click.self="closePlanetDetails">
-          <div class="w-full max-w-md bg-gradient-to-b from-slate-900 via-slate-900 to-purple-950/90 border border-purple-500/30 rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl relative animate-slide-up">
-            
-            <!-- Close Button -->
-            <button class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800/80 border border-slate-700 text-slate-300 flex items-center justify-center text-sm font-bold hover:bg-slate-700" @click="closePlanetDetails">
-              ✕
-            </button>
+      <!-- Backdrop -->
+      <Transition name="bs-backdrop-fade">
+        <div
+          v-if="selectedPlanet"
+          class="pk-backdrop"
+          @click="closePlanetDetails"
+        />
+      </Transition>
 
-            <!-- Planet Header -->
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-amber-400/30" :class="selectedPlanet.bgGradient">
-                {{ selectedPlanet.symbol }}
+      <!-- Sheet -->
+      <Transition name="pk-sheet-slide">
+        <div
+          v-if="selectedPlanet"
+          class="pk-sheet"
+          role="dialog"
+          aria-modal="true"
+        >
+          <!-- Drag handle -->
+          <div class="pk-handle" />
+
+          <!-- Planet header identity -->
+          <div class="pk-header">
+            <div class="pk-planet-ring">
+              <div class="pk-planet-avatar">{{ selectedPlanet.symbol }}</div>
+            </div>
+            <div class="pk-info">
+              <div class="pk-name-row">
+                <h2 class="pk-name">{{ selectedPlanet.name }}</h2>
+                <span class="pk-category-chip">{{ selectedPlanet.category }}</span>
               </div>
-              <div>
-                <span class="text-[10px] font-extrabold tracking-widest text-amber-400 uppercase bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
-                  {{ selectedPlanet.category }}
-                </span>
-                <h3 class="text-lg font-extrabold text-slate-100 font-['Outfit'] mt-1">
-                  {{ selectedPlanet.name }} in {{ selectedPlanet.houseName }}
-                </h3>
+              <p class="pk-house">{{ selectedPlanet.houseName }}</p>
+              <div class="pk-power-pill">
+                <span class="pk-power-val">{{ selectedPlanet.powerRating }}</span>
+                <span class="pk-power-lbl">Power Rating / 100</span>
               </div>
             </div>
+          </div>
 
-            <!-- Energy & Manifestation Impact Box -->
-            <div class="bg-slate-950/60 border border-purple-500/20 rounded-xl p-3.5 mb-4">
-              <p class="text-xs font-bold text-purple-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                <span>⚡</span> Manifestation Energy
-              </p>
-              <p class="text-xs text-slate-200 leading-relaxed font-normal">
-                {{ selectedPlanet.manifestationEffect }}
-              </p>
+          <!-- Manifestation energy pitch -->
+          <div class="pk-pitch">
+            <div class="pk-pitch-icon">⚡</div>
+            <p class="pk-pitch-text">{{ selectedPlanet.manifestationEffect }}</p>
+          </div>
+
+          <!-- Stat rows -->
+          <div class="pk-stats">
+            <div class="pk-stat-row">
+              <span class="pk-stat-label">Zodiac Sign</span>
+              <span class="pk-stat-val">{{ selectedPlanet.zodiacSign }}</span>
             </div>
-
-            <!-- Detailed Explanation -->
-            <div class="space-y-2 mb-5">
-              <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-800">
-                <span class="text-slate-400">Zodiac Sign Alignment</span>
-                <span class="font-bold text-slate-200">{{ selectedPlanet.zodiacSign }}</span>
-              </div>
-              <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-800">
-                <span class="text-slate-400">Power Level</span>
-                <span class="font-bold text-amber-400">{{ selectedPlanet.powerRating }} / 100</span>
-              </div>
-              <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-800">
-                <span class="text-slate-400">Cosmic Element</span>
-                <span class="font-bold text-indigo-300">{{ selectedPlanet.element }}</span>
-              </div>
+            <div class="pk-stat-row">
+              <span class="pk-stat-label">Cosmic Element</span>
+              <span class="pk-stat-val">{{ selectedPlanet.element }}</span>
             </div>
+          </div>
 
-            <!-- Actionable Remedy / Advice -->
-            <div class="bg-amber-400/10 border border-amber-400/30 rounded-xl p-3 flex items-start gap-2.5">
-              <span class="text-base">💡</span>
-              <p class="text-xs text-amber-200/90 leading-snug">
-                <strong class="text-amber-300">Cosmic Key:</strong> {{ selectedPlanet.keyRemedy }}
-              </p>
-            </div>
+          <!-- Cosmic Key remedy -->
+          <div class="pk-remedy">
+            <span class="pk-remedy-icon">💡</span>
+            <p class="pk-remedy-text">
+              <strong class="pk-remedy-strong">Cosmic Key:</strong>
+              {{ selectedPlanet.keyRemedy }}
+            </p>
+          </div>
 
-            <!-- Got it button -->
-            <button class="w-full mt-5 py-3 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-purple-600 text-slate-950 font-bold text-xs uppercase tracking-wider font-['Outfit'] shadow-lg shadow-amber-500/20 hover:opacity-95 active:scale-[0.98] transition-all" @click="closePlanetDetails">
-              Close Placement Details
-            </button>
+          <!-- Gold CTA -->
+          <button class="pk-cta" @click="closePlanetDetails">
+            <span class="pk-cta-label">Got it — Close</span>
+            <span class="pk-cta-sub">{{ selectedPlanet.houseName }}</span>
+          </button>
+
+          <!-- Trust strip -->
+          <div class="pk-trust">
+            <span>🌌 Vedic Astrology</span>
+            <span>✦</span>
+            <span>🔮 Lagna Chart</span>
+            <span>✦</span>
+            <span>✨ Manifestation AI</span>
           </div>
         </div>
       </Transition>
@@ -385,21 +401,264 @@ function closePlanetDetails() {
   dominant-baseline: central;
 }
 
-/* ── Modal animations ─────────────────────────────────────────────── */
-.modal-fade-enter-active,
-.modal-fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-.modal-fade-enter-from,
-.modal-fade-leave-to {
-  opacity: 0;
+/* ═══════════════════════════════════════════════════════════════════
+   PLANET BOTTOM SHEET — matches ConsultationBottomSheet style
+═══════════════════════════════════════════════════════════════════ */
+
+/* Backdrop */
+.pk-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(24px); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+/* Sheet */
+.pk-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  z-index: 901;
+  background: linear-gradient(
+    160deg,
+    rgba(15, 10, 40, 0.98) 0%,
+    rgba(10, 8, 30, 0.98) 100%
+  );
+  border-top: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 1.5rem 1.5rem 0 0;
+  padding: 0 1.25rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 -8px 40px rgba(109, 40, 217, 0.25),
+              0 -2px 0 rgba(139, 92, 246, 0.1),
+              inset 0 1px 0 rgba(255,255,255,0.04);
+  max-height: 90dvh;
+  overflow-y: auto;
+  scrollbar-width: none;
 }
-.animate-slide-up {
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+.pk-sheet::-webkit-scrollbar { display: none; }
+
+/* Drag handle */
+.pk-handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  margin: 0.85rem auto 0;
+  flex-shrink: 0;
+}
+
+/* Header strip */
+.pk-header {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+/* Planet avatar ring — spinning conic gradient like ConsultationBottomSheet */
+.pk-planet-ring {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: conic-gradient(#8b5cf6, #fbbf24, #c4b5fd, #f59e0b, #8b5cf6);
+  padding: 2px;
+  animation: pk-spin-slow 10s linear infinite;
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.35);
+}
+@keyframes pk-spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.pk-planet-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e1040 0%, #0f1e3d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.pk-info { flex: 1; display: flex; flex-direction: column; gap: 0.2rem; }
+
+.pk-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pk-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #e8eaf6;
+  margin: 0;
+}
+
+.pk-category-chip {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(168, 85, 247, 0.18);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+  white-space: nowrap;
+}
+
+.pk-house {
+  font-size: 0.68rem;
+  color: rgba(232, 234, 246, 0.45);
+  margin: 0;
+}
+
+.pk-power-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  margin-top: 0.1rem;
+}
+.pk-power-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 900;
+  color: #fbbf24;
+}
+.pk-power-lbl {
+  font-size: 0.57rem;
+  font-weight: 600;
+  color: rgba(251, 191, 36, 0.6);
+}
+
+/* Pitch block */
+.pk-pitch {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 0.85rem 1rem;
+  border-radius: 0.875rem;
+  background: rgba(109, 40, 217, 0.1);
+  border: 1px solid rgba(109, 40, 217, 0.22);
+}
+.pk-pitch-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.05rem; }
+.pk-pitch-text {
+  font-size: 0.8rem;
+  color: rgba(232, 234, 246, 0.72);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Stat rows */
+.pk-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.pk-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.pk-stat-row:last-child { border-bottom: none; }
+.pk-stat-label {
+  font-size: 0.72rem;
+  color: rgba(232, 234, 246, 0.45);
+}
+.pk-stat-val {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #e8eaf6;
+}
+
+/* Remedy */
+.pk-remedy {
+  display: flex;
+  gap: 0.65rem;
+  align-items: flex-start;
+  padding: 0.8rem 0.9rem;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 0.875rem;
+}
+.pk-remedy-icon { font-size: 1.1rem; flex-shrink: 0; }
+.pk-remedy-text { font-size: 0.78rem; color: rgba(232, 234, 246, 0.65); line-height: 1.5; margin: 0; }
+.pk-remedy-strong { color: #fbbf24; font-weight: 700; }
+
+/* Gold CTA button — matches .bs-cta */
+.pk-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+  padding: 0.95rem 1.5rem;
+  border-radius: 1rem;
+  border: none;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  color: #030712;
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+  box-shadow: 0 0 28px rgba(251,191,36,0.35), 0 6px 20px rgba(0,0,0,0.4);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  animation: pk-cta-pulse 3s ease-in-out infinite;
+}
+@keyframes pk-cta-pulse {
+  0%, 100% { box-shadow: 0 0 28px rgba(251,191,36,0.35), 0 6px 20px rgba(0,0,0,0.4); }
+  50%       { box-shadow: 0 0 44px rgba(251,191,36,0.55), 0 6px 24px rgba(0,0,0,0.5); }
+}
+.pk-cta:hover {
+  transform: translateY(-2px) scale(1.02);
+  animation: none;
+  box-shadow: 0 0 44px rgba(251,191,36,0.5), 0 10px 28px rgba(0,0,0,0.5);
+}
+.pk-cta:active { transform: scale(0.97); }
+.pk-cta-label { font-size: 0.95rem; font-weight: 800; }
+.pk-cta-sub   { font-size: 0.65rem; font-weight: 500; opacity: 0.65; }
+
+/* Trust strip */
+.pk-trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  font-size: 0.6rem;
+  color: rgba(232, 234, 246, 0.22);
+  flex-wrap: wrap;
+}
+
+/* Transitions */
+.bs-backdrop-fade-enter-active,
+.bs-backdrop-fade-leave-active { transition: opacity 0.28s ease; }
+.bs-backdrop-fade-enter-from,
+.bs-backdrop-fade-leave-to { opacity: 0; }
+
+.pk-sheet-slide-enter-active {
+  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.28s ease;
+}
+.pk-sheet-slide-leave-active {
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.pk-sheet-slide-enter-from,
+.pk-sheet-slide-leave-to {
+  transform: translateX(-50%) translateY(100%);
+  opacity: 0;
 }
 </style>
