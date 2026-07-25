@@ -12,40 +12,6 @@
         <p class="page-subtitle">Your cosmic command centre</p>
       </div>
     </div>
-
-    <!-- ══════════════════════════════════════════════════════════════════
-         QUICK ACTION SHORTCUTS
-    ═══════════════════════════════════════════════════════════════════ -->
-    <div class="section-label-row">
-      <span class="section-chip">⚡ QUICK ACTIONS</span>
-    </div>
-
-    <div class="quick-actions-grid">
-      <RouterLink to="/astro-ai" class="qa-card qa-card--ai">
-        <div class="qa-icon-wrap">✨</div>
-        <span class="qa-name">Astro AI</span>
-        <span class="qa-desc">Ask anything</span>
-      </RouterLink>
-
-      <RouterLink to="/astrologers" class="qa-card qa-card--astro">
-        <div class="qa-icon-wrap">🔮</div>
-        <span class="qa-name">Book Session</span>
-        <span class="qa-desc">Live consult</span>
-      </RouterLink>
-
-      <RouterLink to="/chronicle" class="qa-card qa-card--chron">
-        <div class="qa-icon-wrap">📜</div>
-        <span class="qa-name">Chronicle</span>
-        <span class="qa-desc">My timeline</span>
-      </RouterLink>
-
-      <RouterLink to="/importer" class="qa-card qa-card--import">
-        <div class="qa-icon-wrap">📥</div>
-        <span class="qa-name">Import</span>
-        <span class="qa-desc">Add prediction</span>
-      </RouterLink>
-    </div>
-
     <!-- ══════════════════════════════════════════════════════════════════
          COSMIC STREAK TRACKER
     ═══════════════════════════════════════════════════════════════════ -->
@@ -97,6 +63,49 @@
         </div>
       </div>
     </div>
+ <!-- ══════════════════════════════════════════════════════════════════
+         INTERACTIVE VISUAL KUNDALI
+    ═══════════════════════════════════════════════════════════════════ -->
+    <div class="section-label-row">
+      <span class="section-chip">🪐 VISUAL KUNDALI</span>
+    </div>
+
+    <div class="kundali-wrapper">
+      <VisualKundali />
+    </div>
+    <!-- ══════════════════════════════════════════════════════════════════
+         QUICK ACTION SHORTCUTS
+    ═══════════════════════════════════════════════════════════════════ -->
+    <div class="section-label-row">
+      <span class="section-chip">⚡ QUICK ACTIONS</span>
+    </div>
+
+    <div class="quick-actions-grid">
+      <RouterLink to="/astro-ai" class="qa-card qa-card--ai">
+        <div class="qa-icon-wrap">✨</div>
+        <span class="qa-name">Astro AI</span>
+        <span class="qa-desc">Ask anything</span>
+      </RouterLink>
+
+      <RouterLink to="/astrologers" class="qa-card qa-card--astro">
+        <div class="qa-icon-wrap">🔮</div>
+        <span class="qa-name">Book Session</span>
+        <span class="qa-desc">Live consult</span>
+      </RouterLink>
+
+      <RouterLink to="/chronicle" class="qa-card qa-card--chron">
+        <div class="qa-icon-wrap">📜</div>
+        <span class="qa-name">Chronicle</span>
+        <span class="qa-desc">My timeline</span>
+      </RouterLink>
+
+      <RouterLink to="/importer" class="qa-card qa-card--import">
+        <div class="qa-icon-wrap">📥</div>
+        <span class="qa-name">Import</span>
+        <span class="qa-desc">Add prediction</span>
+      </RouterLink>
+    </div>
+
 
     <!-- ══════════════════════════════════════════════════════════════════
          TODAY'S COSMIC SUGGESTIONS
@@ -164,16 +173,7 @@
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════════════════════
-         INTERACTIVE VISUAL KUNDALI
-    ═══════════════════════════════════════════════════════════════════ -->
-    <div class="section-label-row">
-      <span class="section-chip">🪐 VISUAL KUNDALI</span>
-    </div>
-
-    <div class="kundali-wrapper">
-      <VisualKundali />
-    </div>
+   
 
     <!-- bottom breathing room -->
     <div style="height: 2rem" />
