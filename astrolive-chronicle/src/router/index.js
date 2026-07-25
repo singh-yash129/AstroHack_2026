@@ -37,6 +37,12 @@ const routes = [
     component: () => import('../views/LiveConsultation.vue'),
     meta: { label: 'Live Chat', hideNav: true },
   },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('../views/ProfileView.vue'),
+    meta: { label: 'Profile' },
+  },
 ]
 
 const router = createRouter({

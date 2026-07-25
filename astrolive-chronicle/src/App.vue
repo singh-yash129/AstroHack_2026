@@ -60,15 +60,13 @@ const IconTimeline = {
     ]),
 }
 
-/** Upload / sparkle icon → "AI Importer" */
-const IconUpload = {
-  name: 'IconUpload',
+/** Person / profile icon → "Profile" */
+const IconProfile = {
+  name: 'IconProfile',
   render: () =>
     h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [
-      h('path', { d: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' }),
-      h('polyline', { points: '17 8 12 3 7 8' }),
-      h('line', { x1: '12', y1: '3', x2: '12', y2: '15' }),
-      h('path', { d: 'M9.5 19.5l1-1a2 2 0 0 1 3 0l1 1', 'stroke-dasharray': '2 2', opacity: '0.5' }),
+      h('circle', { cx: '12', cy: '8', r: '4' }),
+      h('path',   { d: 'M4 20c0-4 3.6-7 8-7s8 3 8 7' }),
     ]),
 }
 
@@ -95,8 +93,8 @@ const IconDashboard = {
 const navItems = [
   { to: '/',            label: 'Dashboard',    icon: IconDashboard },
   { to: '/chronicle',   label: 'My Chronicle', icon: IconTimeline  },
-  { to: '/importer',    label: 'AI Importer',  icon: IconUpload    },
   { to: '/astrologers', label: 'Astrologers',  icon: IconStars     },
+  { to: '/profile',     label: 'Profile',      icon: IconProfile   },
 ]
 </script>
 

@@ -87,19 +87,19 @@
         <span class="qa-desc">Ask anything</span>
       </RouterLink>
 
-      <RouterLink to="/astrologers" class="qa-card qa-card--astro">
-        <div class="qa-icon-wrap">🔮</div>
-        <span class="qa-name">Book Session</span>
-        <span class="qa-desc">Live consult</span>
+      <RouterLink to="/astro-ai?mode=palm" class="qa-card qa-card--palm">
+        <div class="qa-icon-wrap">🤚</div>
+        <span class="qa-name">AI Palm</span>
+        <span class="qa-desc">Read my hand</span>
       </RouterLink>
 
-      <RouterLink to="/chronicle" class="qa-card qa-card--chron">
-        <div class="qa-icon-wrap">📜</div>
-        <span class="qa-name">Chronicle</span>
-        <span class="qa-desc">My timeline</span>
-      </RouterLink>
+      <button class="qa-card qa-card--kundali" @click="scrollToKundali">
+        <div class="qa-icon-wrap">🪐</div>
+        <span class="qa-name">Kundali</span>
+        <span class="qa-desc">Birth chart</span>
+      </button>
 
-      <RouterLink to="/importer" class="qa-card qa-card--import">
+    <RouterLink to="/importer" class="qa-card qa-card--import">
         <div class="qa-icon-wrap">📥</div>
         <span class="qa-name">Import</span>
         <span class="qa-desc">Add prediction</span>
