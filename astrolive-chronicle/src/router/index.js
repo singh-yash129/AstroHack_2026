@@ -3,6 +3,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
+    name: 'dashboard',
+    component: () => import('../views/Dashboard.vue'),
+    meta: { label: 'Dashboard' },
+  },
+  {
+    path: '/chronicle',
     name: 'chronicle',
     component: () => import('../views/ChronicleView.vue'),
     meta: { label: 'My Chronicle' },

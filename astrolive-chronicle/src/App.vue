@@ -11,7 +11,7 @@
     </main>
 
     <!-- ── Fixed Bottom Navigation ────────────────────────────────────── -->
-    <nav v-if="showNav" class="bottom-nav" role="navigation" aria-label="Main navigation">
+    <nav v-if="showNav" class="bottom-nav flex items-center justify-around w-full" role="navigation" aria-label="Main navigation">
       <RouterLink
         v-for="item in navItems"
         :key="item.to"
@@ -82,21 +82,21 @@ const IconStars = {
     ]),
 }
 
-/** Sparkle / AI icon → "Astro AI" */
-const IconSparkle = {
-  name: 'IconSparkle',
+/** Home / Star icon → "Dashboard" */
+const IconDashboard = {
+  name: 'IconDashboard',
   render: () =>
     h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [
-      h('path', { d: 'M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z' }),
-      h('path', { d: 'M19 2l1 2.5L22.5 5.5 20 6.5 19 9l-1-2.5-2.5-1L18 4.5z', opacity: '0.7' }),
+      h('path', { d: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' }),
+      h('polyline', { points: '9 22 9 12 15 12 15 22' }),
     ]),
 }
 
 const navItems = [
-  { to: '/',            label: 'Chronicle',   icon: IconTimeline },
-  { to: '/astro-ai',    label: 'Astro AI',    icon: IconSparkle  },
-  { to: '/importer',    label: 'AI Importer', icon: IconUpload   },
-  { to: '/astrologers', label: 'Astrologers', icon: IconStars    },
+  { to: '/',            label: 'Dashboard',    icon: IconDashboard },
+  { to: '/chronicle',   label: 'My Chronicle', icon: IconTimeline  },
+  { to: '/importer',    label: 'AI Importer',  icon: IconUpload    },
+  { to: '/astrologers', label: 'Astrologers',  icon: IconStars     },
 ]
 </script>
 
