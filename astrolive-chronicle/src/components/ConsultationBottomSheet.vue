@@ -247,7 +247,6 @@ function handleBook() {
   border-radius: 50%;
   background: conic-gradient(#8b5cf6, #a78bfa, #c4b5fd, #8b5cf6);
   padding: 2px;
-  animation: spin-slow 12s linear infinite;
   box-shadow: 0 0 16px rgba(139,92,246,0.4);
 }
 

@@ -623,13 +623,11 @@ onUnmounted(() => timers.forEach(clearTimeout))
 .orb-ring--outer {
   width: 180px; height: 180px;
   border-color: rgba(109,40,217,0.25);
-  animation: orbit-spin 8s linear infinite;
 }
 
 .orb-ring--mid {
   width: 130px; height: 130px;
   border-color: rgba(251,191,36,0.2);
-  animation: orbit-spin 5s linear infinite reverse;
 }
 
 @keyframes orbit-spin {
@@ -647,20 +645,14 @@ onUnmounted(() => timers.forEach(clearTimeout))
 .orb-planet--1 {
   top: 0; left: 50%;
   transform: translateX(-50%);
-  animation: revolve 8s linear infinite;
-  transform-origin: 0 90px;
 }
 
 .orb-planet--2 {
   top: 50%; left: 0;
   transform: translateY(-50%);
-  animation: revolve 5s linear infinite reverse;
-  transform-origin: 90px 0;
 }
 
 .orb-planet--3 {
-  animation: revolve 12s linear infinite;
-  transform-origin: 90px 0;
   top: 30%; left: 80%;
 }
 

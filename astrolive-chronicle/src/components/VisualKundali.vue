@@ -469,7 +469,6 @@ function closePlanetDetails() {
   border-radius: 50%;
   background: conic-gradient(#8b5cf6, #fbbf24, #c4b5fd, #f59e0b, #8b5cf6);
   padding: 2px;
-  animation: pk-spin-slow 10s linear infinite;
   box-shadow: 0 0 18px rgba(251, 191, 36, 0.35);
 }
 @keyframes pk-spin-slow {

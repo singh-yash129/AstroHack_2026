@@ -315,7 +315,6 @@ function handleShare() {
   background: conic-gradient(#fbbf24, #f59e0b, #d97706, #fbbf24);
   padding: 3px;
   box-shadow: 0 0 30px rgba(251,191,36,0.5), 0 0 60px rgba(251,191,36,0.2);
-  animation: spin-slow 8s linear infinite;
 }
 .check-inner-ring {
   width: 100%; height: 100%;

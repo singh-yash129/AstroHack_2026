@@ -572,7 +572,6 @@ onUnmounted(() => {
   border-radius: 50%;
   background: conic-gradient(#c084fc, #818cf8, #38bdf8, #c084fc);
   padding: 2px;
-  animation: rotateGlow 10s linear infinite;
   flex-shrink: 0;
 }
 

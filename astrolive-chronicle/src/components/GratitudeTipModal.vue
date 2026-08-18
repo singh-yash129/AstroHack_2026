@@ -286,11 +286,10 @@ function sendTip() {
 /* Spinning conic ring */
 .ast-ring {
   flex-shrink: 0;
-  width: 68px; height: 68px;
+  width: 58px; height: 58px;
   border-radius: 50%;
   background: conic-gradient(#8b5cf6, #a78bfa, #c4b5fd, #8b5cf6);
   padding: 2.5px;
-  animation: spin-slow 10s linear infinite;
   box-shadow: 0 0 20px rgba(139,92,246,0.45);
 }
 

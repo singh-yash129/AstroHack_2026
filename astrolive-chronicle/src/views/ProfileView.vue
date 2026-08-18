@@ -135,7 +135,6 @@ const settings = [
   border-radius: 50%;
   background: conic-gradient(#8b5cf6, #fbbf24, #c4b5fd, #f59e0b, #8b5cf6);
   padding: 2.5px;
-  animation: spin-slow 12s linear infinite;
   box-shadow: 0 0 20px rgba(251,191,36,0.3);
 }
 @keyframes spin-slow {
