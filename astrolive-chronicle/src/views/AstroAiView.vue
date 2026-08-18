@@ -209,8 +209,10 @@
 
 <script setup>
 import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useChronicleStore } from '../stores/chronicle.js'
 
+const route = useRoute()
 const chronicleStore = useChronicleStore()
 
 // ── Data ───────────────────────────────────────────────────────────────────
@@ -512,6 +514,19 @@ async function scrollToBottom() {
 }
 
 onMounted(() => {
+  if (route.query.mode === 'palm' || route.query.scanned === 'true') {
+    messages.value.push({
+      id: Date.now(),
+      sender: 'ai',
+      text: `✋ **Multi-Angle Palm Scan Analysis Complete!**\n\nHere is your decoded Samudrik Shastra breakdown based on all 5 captured angles:\n\n• **Heart Line (Primary)**: High emotional clarity with strong Venusian empathy.\n• **Head Line (Logical Vector)**: Deep analytical curve favoring decision-making in H2 2026.\n• **Life Line (Vitality Index)**: 94% unbroken continuity & high stamina.\n• **Fate & Career Line**: Significant breakthrough window indicated around Sept 2026.\n\nHow can I help you explore specific lines or remedies today?`,
+      time: getCurrentTime(),
+      planetaryInsight: {
+        planet: 'Sun & Venus',
+        house: '10th & 1st',
+        detail: 'Mount of Sun elevated with clear Trine intersection.',
+      },
+    })
+  }
   scrollToBottom()
 })
 

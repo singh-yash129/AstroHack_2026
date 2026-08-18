@@ -43,6 +43,12 @@ const routes = [
     component: () => import('../views/ProfileView.vue'),
     meta: { label: 'Profile' },
   },
+  {
+    path: '/palm-scanner',
+    name: 'palm-scanner',
+    component: () => import('../views/PalmScannerView.vue'),
+    meta: { label: 'AI Palm Scanner', hideNav: true },
+  },
 ]
 
 const router = createRouter({

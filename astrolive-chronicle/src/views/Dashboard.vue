@@ -87,10 +87,10 @@
         <span class="qa-desc">Ask anything</span>
       </RouterLink>
 
-      <RouterLink to="/astro-ai?mode=palm" class="qa-card qa-card--palm">
+      <RouterLink to="/palm-scanner" class="qa-card qa-card--palm">
         <div class="qa-icon-wrap">🤚</div>
         <span class="qa-name">AI Palm</span>
-        <span class="qa-desc">Read my hand</span>
+        <span class="qa-desc">Scan 5 photos</span>
       </RouterLink>
 
       <button class="qa-card qa-card--kundali" @click="scrollToKundali">
