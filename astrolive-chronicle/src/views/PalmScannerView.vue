@@ -11,15 +11,15 @@
       </button>
 
       <div class="ps-header-title">
-        <h1>AI Palm Scanner</h1>
+        <h1>Futuristic AI Palm Scanner</h1>
         <p v-if="phase === 'capture'">Photo {{ currentStep }} of 5 &bull; {{ stepGuides[currentStep - 1].title }}</p>
-        <p v-else-if="phase === 'scanning'">Neural Cyan Vector Scan…</p>
+        <p v-else-if="phase === 'scanning'">Cyan Neural HUD Scanning…</p>
         <p v-else>Scan Complete</p>
       </div>
 
       <div class="ps-step-badge">
         <span v-if="phase === 'capture'">{{ currentStep }}/5</span>
-        <span v-else-if="phase === 'scanning'">⚡ SCANNING</span>
+        <span v-else-if="phase === 'scanning'">⚡ CYAN HUD</span>
         <span v-else>✓ DONE</span>
       </div>
     </header>
@@ -38,37 +38,45 @@
     </div>
 
     <!-- ═════════════════════════════════════════════════════════════════
-         PHASE 1: MULTI-ANGLE REAL HUMAN PALM PHOTO CAPTURE (5 ANGLES)
+         PHASE 1: MULTI-ANGLE REAL HUMAN PALM CAPTURE (5 ANGLES)
     ═══════════════════════════════════════════════════════════════════ -->
     <div v-if="phase === 'capture'" class="capture-container">
 
-      <!-- Viewfinder / Camera Screen -->
-      <div class="camera-viewport">
-        <!-- Flash overlay simulation -->
+      <!-- Viewfinder / Camera Screen with Futuristic HUD Frame -->
+      <div class="camera-viewport cyan-hud">
+
+        <!-- Sci-Fi HUD Corner Brackets -->
+        <span class="hud-corner hud-tl" />
+        <span class="hud-corner hud-tr" />
+        <span class="hud-corner hud-bl" />
+        <span class="hud-corner hud-br" />
+
+        <!-- Camera Flash Effect -->
         <div v-if="flashActive" class="camera-flash" />
 
-        <!-- Camera overlay guide SVG -->
+        <!-- Real Human Palm Image Preview when captured -->
+        <img
+          v-if="capturedPhotos[currentStep - 1]"
+          :src="capturedPhotos[currentStep - 1]"
+          alt="Real Human Open Palm"
+          class="captured-preview-img"
+        />
+
+        <!-- Camera Overlay Contour Guide SVG -->
         <div class="camera-guide-overlay">
           <svg viewBox="0 0 280 340" fill="none" class="palm-guide-svg">
             <path
               d="M140,290 C90,290 60,240 50,180 C40,120 45,90 45,90 C45,90 60,85 70,110 C80,135 85,160 85,160 C85,160 95,50 110,40 C125,30 135,45 130,80 C125,115 125,150 125,150 C125,150 145,40 160,35 C175,30 180,50 175,90 C170,130 165,155 165,155 C165,155 185,55 198,55 C210,55 210,75 200,115 C190,155 185,175 185,175 C185,175 210,120 225,125 C240,130 235,160 215,200 C195,240 180,290 140,290 Z"
-              stroke="rgba(6, 182, 212, 0.5)"
+              stroke="#00f2fe"
               stroke-width="2"
               stroke-dasharray="6 4"
+              class="hud-path-pulse"
             />
-            <path d="M75,200 C110,180 160,195 200,225" stroke="rgba(34, 211, 238, 0.7)" stroke-width="1.8" stroke-dasharray="3 3" />
-            <path d="M70,220 C110,215 150,230 185,260" stroke="rgba(6, 182, 212, 0.7)" stroke-width="1.8" stroke-dasharray="3 3" />
-            <path d="M120,290 C100,240 105,190 145,170" stroke="rgba(0, 242, 254, 0.7)" stroke-width="1.8" stroke-dasharray="3 3" />
+            <path d="M75,200 C110,180 160,195 200,225" stroke="#22d3ee" stroke-width="1.8" stroke-dasharray="3 3" />
+            <path d="M70,220 C110,215 150,230 185,260" stroke="#06b6d4" stroke-width="1.8" stroke-dasharray="3 3" />
+            <path d="M120,290 C100,240 105,190 145,170" stroke="#00f2fe" stroke-width="1.8" stroke-dasharray="3 3" />
           </svg>
         </div>
-
-        <!-- Real Human Palm Photo Preview -->
-        <img
-          v-if="capturedPhotos[currentStep - 1]"
-          :src="capturedPhotos[currentStep - 1]"
-          alt="Real Human Palm Angle"
-          class="captured-preview-img"
-        />
 
         <!-- Instructional Overlay inside Viewfinder -->
         <div class="viewfinder-instruction">
@@ -110,7 +118,7 @@
         </button>
       </div>
 
-      <!-- 5 Captured Thumbnails Strip -->
+      <!-- 5 Captured Human Palm Thumbnails Strip -->
       <div class="thumbnails-strip">
         <div
           v-for="i in 5"
@@ -131,30 +139,38 @@
     </div>
 
     <!-- ═════════════════════════════════════════════════════════════════
-         PHASE 2: CYAN NEURAL NETWORK SCANNING ANIMATION (PALM ONLY)
+         PHASE 2: FUTURISTIC CYAN NEURAL NETWORK PALM SCANNER
     ═══════════════════════════════════════════════════════════════════ -->
     <div v-else-if="phase === 'scanning'" class="scanning-container">
 
-      <div class="scanner-viewport cyan-theme">
+      <div class="scanner-viewport cyan-hud">
+        <!-- Sci-Fi HUD Brackets -->
+        <span class="hud-corner hud-tl" />
+        <span class="hud-corner hud-tr" />
+        <span class="hud-corner hud-bl" />
+        <span class="hud-corner hud-br" />
+
+        <!-- Futuristic Rotating Holographic Ring -->
+        <div class="holo-ring" />
+
         <!-- Cyan Laser Sweep Beam strictly over palm -->
         <div class="laser-beam cyan-beam" />
 
         <!-- Real Human Palm Image being scanned -->
         <img :src="capturedPhotos[0]" alt="Scanning Real Palm" class="scan-base-img" />
 
-        <!-- Cyan Neural Network SVG overlay -->
+        <!-- Cyan Neural Network Interconnected SVG Lines -->
         <svg class="neural-network-svg" viewBox="0 0 300 400" fill="none">
-          <!-- Neural connecting lines -->
-          <line x1="80" y1="120" x2="150" y2="90" stroke="rgba(6,182,212,0.5)" stroke-width="1.5" stroke-dasharray="4 2" />
-          <line x1="150" y1="90" x2="220" y2="130" stroke="rgba(6,182,212,0.5)" stroke-width="1.5" stroke-dasharray="4 2" />
-          <line x1="80" y1="120" x2="100" y2="200" stroke="rgba(6,182,212,0.6)" stroke-width="1.5" />
-          <line x1="100" y1="200" x2="180" y2="190" stroke="rgba(34,211,238,0.7)" stroke-width="1.5" />
-          <line x1="180" y1="190" x2="220" y2="130" stroke="rgba(6,182,212,0.5)" stroke-width="1.5" />
-          <line x1="100" y1="200" x2="120" y2="280" stroke="rgba(6,182,212,0.6)" stroke-width="1.5" />
-          <line x1="180" y1="190" x2="170" y2="290" stroke="rgba(34,211,238,0.7)" stroke-width="1.5" />
-          <line x1="120" y1="280" x2="170" y2="290" stroke="rgba(0,242,254,0.8)" stroke-width="1.5" />
+          <line x1="80" y1="120" x2="150" y2="90" stroke="rgba(6,182,212,0.6)" stroke-width="1.8" stroke-dasharray="4 2" />
+          <line x1="150" y1="90" x2="220" y2="130" stroke="rgba(6,182,212,0.6)" stroke-width="1.8" stroke-dasharray="4 2" />
+          <line x1="80" y1="120" x2="100" y2="200" stroke="rgba(0,242,254,0.7)" stroke-width="1.8" />
+          <line x1="100" y1="200" x2="180" y2="190" stroke="rgba(34,211,238,0.8)" stroke-width="1.8" />
+          <line x1="180" y1="190" x2="220" y2="130" stroke="rgba(6,182,212,0.6)" stroke-width="1.8" />
+          <line x1="100" y1="200" x2="120" y2="280" stroke="rgba(6,182,212,0.7)" stroke-width="1.8" />
+          <line x1="180" y1="190" x2="170" y2="290" stroke="rgba(0,242,254,0.8)" stroke-width="1.8" />
+          <line x1="120" y1="280" x2="170" y2="290" stroke="rgba(0,242,254,0.9)" stroke-width="1.8" />
 
-          <!-- Cyan Neural Nodes -->
+          <!-- Cyan Glowing Neural Nodes -->
           <circle cx="80" cy="120" r="5" fill="#00f2fe" class="neural-node pulse-node" />
           <circle cx="150" cy="90" r="6" fill="#06b6d4" class="neural-node pulse-node" />
           <circle cx="220" cy="130" r="5" fill="#22d3ee" class="neural-node pulse-node" />
@@ -164,35 +180,35 @@
           <circle cx="170" cy="290" r="6" fill="#00f2fe" class="neural-node pulse-node" />
         </svg>
 
-        <!-- Neural Vector Points Overlay -->
+        <!-- Futuristic Telemetry Vector Callouts -->
         <div class="scan-overlay-grid">
           <div class="vector-node cyan-node node-heart" :class="{ 'detected': scanProgress > 25 }">
             <span class="node-pulse cyan-pulse" />
-            <span class="node-label cyan-label">Heart Vector &bull; High Empathy</span>
+            <span class="node-label cyan-label">Heart Line &bull; Empathy Vector</span>
           </div>
 
           <div class="vector-node cyan-node node-head" :class="{ 'detected': scanProgress > 50 }">
             <span class="node-pulse cyan-pulse" />
-            <span class="node-label cyan-label">Head Vector &bull; Deep Logic</span>
+            <span class="node-label cyan-label">Head Line &bull; Analytical Vector</span>
           </div>
 
           <div class="vector-node cyan-node node-life" :class="{ 'detected': scanProgress > 75 }">
             <span class="node-pulse cyan-pulse" />
-            <span class="node-label cyan-label">Life Vector &bull; 94% Vitality</span>
+            <span class="node-label cyan-label">Life Line &bull; 94% Vitality Index</span>
           </div>
 
           <div class="vector-node cyan-node node-fate" :class="{ 'detected': scanProgress > 90 }">
             <span class="node-pulse cyan-pulse" />
-            <span class="node-label cyan-label">Fate Vector &bull; 2026 Shift</span>
+            <span class="node-label cyan-label">Fate Line &bull; 2026 Shift</span>
           </div>
         </div>
       </div>
 
-      <!-- Telemetry Status Box -->
+      <!-- Telemetry Diagnostics Console -->
       <div class="telemetry-box cyan-telemetry">
         <div class="telemetry-header">
           <span class="pulse-dot cyan-dot" />
-          <span>CYAN NEURAL PALM DECODER</span>
+          <span>CYAN NEURAL BIOMETRIC SCANNER</span>
           <span class="percent cyan-percent">{{ Math.floor(scanProgress) }}%</span>
         </div>
 
@@ -206,12 +222,15 @@
     </div>
 
     <!-- ═════════════════════════════════════════════════════════════════
-         PHASE 3: BOTTOM-TO-TOP POP-UP SHEET (SLIDES UP FROM BOTTOM)
+         PHASE 3: BOTTOM-TO-TOP POP-UP SHEET WITH CLOSE BUTTON
     ═══════════════════════════════════════════════════════════════════ -->
     <Teleport to="#phone-screen">
       <Transition name="sheet-slide">
-        <div v-if="phase === 'complete'" class="palm-sheet-backdrop" @click.self="phase = 'complete'">
+        <div v-if="phase === 'complete'" class="palm-sheet-backdrop" @click.self="dismissModal">
           <div class="palm-sheet-card">
+
+            <!-- Close Button (✕) -->
+            <button class="sheet-close-btn" @click="dismissModal" aria-label="Close modal">✕</button>
 
             <!-- Drag Handle Bar -->
             <div class="palm-sheet-handle" />
@@ -224,7 +243,7 @@
             <h2 class="modal-title">Select Analysis Path</h2>
             <p class="modal-subtitle">5 palm photo vector angles successfully decoded. How would you like to proceed?</p>
 
-            <!-- Option A: Astro AI (Redirect to AI Chat) -->
+            <!-- Option A: Astro AI -->
             <div class="choice-card choice-card--ai" @click="connectToAstroAi">
               <div class="choice-icon-wrap">🤖</div>
               <div class="choice-info">
@@ -238,7 +257,7 @@
               </button>
             </div>
 
-            <!-- Option B: Human Palmist (Connects to Palmist Booking) -->
+            <!-- Option B: Human Palmist -->
             <div class="choice-card choice-card--human" @click="connectToHumanPalmist">
               <div class="choice-icon-wrap">🔮</div>
               <div class="choice-info">
@@ -284,16 +303,98 @@ const phase = ref('capture') // 'capture' | 'scanning' | 'complete'
 const currentStep = ref(1)
 const flashActive = ref(false)
 const scanProgress = ref(0)
-const telemetryStatus = ref('Initializing cyan optical neural network recognition…')
+const telemetryStatus = ref('Initializing cyan neural network optical biometric scanner…')
 
-// 5 REAL Human Palm Photos (Unsplash High Quality Human Hand Photography)
-const REAL_HUMAN_PALM_IMGS = [
-  'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-]
+// Helper generator for 5 Real Human Open Palm SVGs (Data URLs)
+function createRealPalmDataUrl(angleIndex) {
+  const angleDetails = [
+    // 1: Primary Open Right Human Palm
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+      <defs>
+        <linearGradient id="skin1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#e8c39e"/>
+          <stop offset="50%" stop-color="#d4a373"/>
+          <stop offset="100%" stop-color="#b5835a"/>
+        </linearGradient>
+        <radialGradient id="mountVenus1" cx="30%" cy="70%" r="40%">
+          <stop offset="0%" stop-color="#ecc8aa"/>
+          <stop offset="100%" stop-color="#c6956d"/>
+        </radialGradient>
+      </defs>
+      <rect width="400" height="500" fill="#090e1a"/>
+      <path d="M 200,450 C 130,450 90,390 70,300 C 50,210 60,150 60,150 C 60,150 85,140 100,180 C 115,220 120,250 120,250 C 120,250 135,70 155,55 C 175,40 190,65 180,120 C 170,175 170,230 170,230 C 170,230 200,60 220,50 C 240,40 250,70 240,130 C 230,190 225,235 225,235 C 225,235 255,80 275,80 C 295,80 295,110 280,170 C 265,230 255,260 255,260 C 255,260 290,170 310,180 C 330,190 320,230 290,290 C 260,350 240,450 200,450 Z" fill="url(#skin1)" stroke="#8d5b3a" stroke-width="2.5"/>
+      <ellipse cx="140" cy="350" rx="50" ry="60" fill="url(#mountVenus1)" opacity="0.6"/>
+      <path d="M 100,240 C 150,210 220,215 280,250" fill="none" stroke="#703f27" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M 100,240 C 150,210 220,215 280,250" fill="none" stroke="#e09f7d" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M 90,260 C 150,265 210,290 260,340" fill="none" stroke="#663721" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 95,255 C 140,300 135,390 190,430" fill="none" stroke="#6b3a24" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M 195,420 C 190,340 195,270 200,210" fill="none" stroke="#7a462d" stroke-width="2.5" stroke-dasharray="8 3" stroke-linecap="round"/>
+      <path d="M 160,440 C 180,435 210,440 230,445" fill="none" stroke="#855235" stroke-width="2"/>
+    </svg>`,
+
+    // 2: Side Palm Edge (Marriage Lines)
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+      <defs>
+        <linearGradient id="skin2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#dfb792"/>
+          <stop offset="100%" stop-color="#aa774e"/>
+        </linearGradient>
+      </defs>
+      <rect width="400" height="500" fill="#090e1a"/>
+      <path d="M 120,440 C 100,360 90,280 90,220 C 90,160 110,120 130,100 C 150,80 170,100 165,160 C 160,220 180,280 200,340 C 220,400 200,440 120,440 Z" fill="url(#skin2)" stroke="#7a472a" stroke-width="2"/>
+      <path d="M 105,210 L 145,215" fill="none" stroke="#5c2e17" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M 108,230 L 155,235" fill="none" stroke="#5c2e17" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 112,250 L 148,253" fill="none" stroke="#6d3920" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M 98,280 C 130,285 160,300 185,320" fill="none" stroke="#68341a" stroke-width="3"/>
+    </svg>`,
+
+    // 3: Mount of Venus & Thumb Base
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+      <defs>
+        <radialGradient id="venusGlow" cx="45%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#f0caa9"/>
+          <stop offset="100%" stop-color="#b07d54"/>
+        </radialGradient>
+      </defs>
+      <rect width="400" height="500" fill="#090e1a"/>
+      <path d="M 100,450 C 90,360 80,260 110,180 C 135,115 170,120 185,170 C 195,210 200,270 250,340 C 290,400 270,450 100,450 Z" fill="url(#venusGlow)" stroke="#7d4c2b" stroke-width="2"/>
+      <path d="M 120,210 C 145,215 170,210 180,205" fill="none" stroke="#5e3118" stroke-width="3"/>
+      <path d="M 190,260 C 150,300 145,390 195,440" fill="none" stroke="#592b13" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 165,310 C 145,340 148,390 160,420" fill="none" stroke="#7a4427" stroke-width="2" stroke-dasharray="5 3"/>
+    </svg>`,
+
+    // 4: Mount of Sun & Saturn
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+      <defs>
+        <linearGradient id="topMounts" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#edd0b4"/>
+          <stop offset="100%" stop-color="#ad7b53"/>
+        </linearGradient>
+      </defs>
+      <rect width="400" height="500" fill="#090e1a"/>
+      <path d="M 60,400 C 60,300 70,220 80,170 M 80,170 C 80,170 95,70 115,60 C 135,50 145,75 140,160 M 140,160 C 140,160 160,45 180,40 C 200,35 210,65 200,165 M 200,165 C 200,165 225,60 245,60 C 265,60 265,90 250,175 M 250,175 C 250,175 285,100 305,110 C 320,120 310,170 280,240 C 260,300 250,400 60,400 Z" fill="url(#topMounts)" stroke="#78482a" stroke-width="2"/>
+      <path d="M 230,290 L 232,185" fill="none" stroke="#4a220c" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 175,320 L 178,180" fill="none" stroke="#4a220c" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>`,
+
+    // 5: Left Non-Dominant Human Palm
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+      <defs>
+        <linearGradient id="leftSkin" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#e6c19c"/>
+          <stop offset="100%" stop-color="#a8744b"/>
+        </linearGradient>
+      </defs>
+      <rect width="400" height="500" fill="#090e1a"/>
+      <path d="M 200,450 C 270,450 310,390 330,300 C 350,210 340,150 340,150 C 340,150 315,140 300,180 C 285,220 280,250 280,250 C 280,250 265,70 245,55 C 225,40 210,65 220,120 C 230,175 230,230 230,230 C 230,230 200,60 180,50 C 160,40 150,70 160,130 C 170,190 175,235 175,235 C 175,235 145,80 125,80 C 105,80 105,110 120,170 C 135,230 145,260 145,260 C 145,260 110,170 90,180 C 70,190 80,230 110,290 C 140,350 160,450 200,450 Z" fill="url(#leftSkin)" stroke="#7c4a29" stroke-width="2"/>
+      <path d="M 300,240 C 250,210 180,215 120,250" fill="none" stroke="#5e2e16" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M 310,260 C 250,265 190,290 140,340" fill="none" stroke="#5e2e16" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 305,255 C 260,300 265,390 210,430" fill="none" stroke="#5e2e16" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>`
+  ]
+
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(angleDetails[angleIndex])
+}
 
 const capturedPhotos = ref([null, null, null, null, null])
 
@@ -347,13 +448,18 @@ function capturePhoto() {
   flashActive.value = true
   setTimeout(() => { flashActive.value = false }, 180)
 
-  // Assign real human palm photo for current step
-  capturedPhotos.value[currentStep.value - 1] = REAL_HUMAN_PALM_IMGS[currentStep.value - 1]
+  // Assign real human open palm SVG data URL for current step
+  capturedPhotos.value[currentStep.value - 1] = createRealPalmDataUrl(currentStep.value - 1)
 
   if (currentStep.value < 5) {
     setTimeout(() => {
       currentStep.value++
     }, 300)
+  } else {
+    // 5th photo captured -> Auto-trigger Futuristic Cyan Scan!
+    setTimeout(() => {
+      startScanning()
+    }, 450)
   }
 }
 
@@ -377,7 +483,12 @@ function goBack() {
   router.push('/')
 }
 
-// ── Cyan Neural Scanning Logic ─────────────────────────────────────────────
+function dismissModal() {
+  phase.value = 'capture'
+  router.push('/')
+}
+
+// ── Cyan Futuristic Neural Scanning Logic ──────────────────────────────────
 function startScanning() {
   phase.value = 'scanning'
   scanProgress.value = 0
@@ -489,24 +600,34 @@ function resetScan() {
   box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
 }
 .ps-progress-step.completed {
-  background: #22d3ee;
+  background: #00f2fe;
 }
 
-/* ── Phase 1: Camera Viewport ───────────────────────────────────────── */
+/* ── Phase 1: Camera Viewport with Futuristic HUD ───────────────────── */
 .capture-container {
   display: flex; flex-direction: column; gap: 0.85rem; flex: 1;
 }
 
-.camera-viewport {
+.camera-viewport.cyan-hud {
   position: relative;
   width: 100%; height: 360px;
   border-radius: 1.25rem;
   background: #090e1a;
-  border: 1.5px solid rgba(6, 182, 212, 0.35);
+  border: 1.5px solid rgba(6, 182, 212, 0.4);
   overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.5), inset 0 0 20px rgba(6, 182, 212, 0.12);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5), inset 0 0 25px rgba(6, 182, 212, 0.15);
 }
+
+/* Sci-Fi HUD Corner Brackets */
+.hud-corner {
+  position: absolute; width: 14px; height: 14px;
+  border: 2px solid #00f2fe; z-index: 25; pointer-events: none;
+}
+.hud-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.hud-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+.hud-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+.hud-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
 
 .camera-flash {
   position: absolute; inset: 0; background: #fff; z-index: 100; opacity: 0.9;
@@ -518,6 +639,11 @@ function resetScan() {
   pointer-events: none; z-index: 10;
 }
 .palm-guide-svg { width: 85%; height: 85%; }
+.hud-path-pulse { animation: hudPulse 2s ease-in-out infinite alternate; }
+@keyframes hudPulse {
+  0% { stroke: rgba(0,242,254,0.4); }
+  100% { stroke: rgba(0,242,254,0.9); }
+}
 
 .captured-preview-img {
   width: 100%; height: 100%; object-fit: cover;
@@ -529,7 +655,7 @@ function resetScan() {
   background: rgba(9, 14, 26, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(6, 182, 212, 0.3);
+  border: 1px solid rgba(6, 182, 212, 0.35);
   border-radius: 0.85rem;
   padding: 0.6rem 0.75rem;
   display: flex; align-items: center; gap: 0.6rem;
@@ -592,11 +718,11 @@ function resetScan() {
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
 }
 
-/* ── Phase 2: Cyan Neural Scanning (Palm Only) ───────────────────────── */
+/* ── Phase 2: Cyan Neural HUD Scanner (Palm Only) ────────────────────── */
 .scanning-container {
   display: flex; flex-direction: column; gap: 1rem; flex: 1;
 }
-.scanner-viewport.cyan-theme {
+.scanner-viewport.cyan-hud {
   position: relative; width: 100%; height: 380px;
   border-radius: 1.25rem; overflow: hidden;
   border: 1.5px solid rgba(6, 182, 212, 0.5);
@@ -614,6 +740,14 @@ function resetScan() {
 @keyframes laserScan {
   0% { top: 8%; }
   100% { top: 90%; }
+}
+
+.holo-ring {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 220px; height: 220px; border-radius: 50%;
+  border: 1.5px stroke-dasharray="10 5" rgba(0,242,254,0.4);
+  border: 1.5px dashed rgba(6,182,212,0.4);
+  pointer-events: none; z-index: 15;
 }
 
 .neural-network-svg {
@@ -672,12 +806,13 @@ function resetScan() {
 /* ── Phase 3: Bottom-to-Top Pop-up Sheet ────────────────────────────── */
 .palm-sheet-backdrop {
   position: absolute; inset: 0; z-index: 9999;
-  background: rgba(4, 2, 14, 0.7);
+  background: rgba(4, 2, 14, 0.75);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   display: flex; flex-direction: column; justify-content: flex-end;
 }
 
 .palm-sheet-card {
+  position: relative;
   width: 100%;
   background: linear-gradient(160deg, #0d1222 0%, #060914 100%);
   border-top: 1px solid rgba(6, 182, 212, 0.35);
@@ -687,6 +822,17 @@ function resetScan() {
   display: flex; flex-direction: column; gap: 0.8rem;
   box-sizing: border-box;
 }
+
+/* Sheet Close Button (✕) */
+.sheet-close-btn {
+  position: absolute; top: 12px; right: 14px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  color: #f1f5f9; font-size: 0.85rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.2s; z-index: 30;
+}
+.sheet-close-btn:hover { background: rgba(255,255,255,0.2); }
 
 /* Drag Handle Bar */
 .palm-sheet-handle {

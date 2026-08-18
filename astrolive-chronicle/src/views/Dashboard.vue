@@ -68,6 +68,7 @@
     ═══════════════════════════════════════════════════════════════════ -->
     <div class="section-label-row">
       <span class="section-chip">🪐 VISUAL KUNDALI</span>
+      <button class="section-pill-btn" @click="openKundaliModal">+ Create Kundali</button>
     </div>
 
     <div class="kundali-wrapper">
@@ -93,10 +94,10 @@
         <span class="qa-desc">Scan 5 photos</span>
       </RouterLink>
 
-      <button class="qa-card qa-card--kundali" @click="scrollToKundali">
+      <button class="qa-card qa-card--kundali" @click="openKundaliModal">
         <div class="qa-icon-wrap">🪐</div>
         <span class="qa-name">Kundali</span>
-        <span class="qa-desc">Birth chart</span>
+        <span class="qa-desc">Create chart</span>
       </button>
 
     <RouterLink to="/importer" class="qa-card qa-card--import">
@@ -175,17 +176,30 @@
 
    
 
+    <!-- Kundali Creator Modal -->
+    <KundaliCreatorModal
+      :is-open="showKundaliModal"
+      @close="showKundaliModal = false"
+    />
+
     <!-- bottom breathing room -->
     <div style="height: 2rem" />
   </section>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { RouterLink } from 'vue-router'
 import VisualKundali from '../components/VisualKundali.vue'
+import KundaliCreatorModal from '../components/KundaliCreatorModal.vue'
 
 const router = useRouter()
+const showKundaliModal = ref(false)
+
+function openKundaliModal() {
+  showKundaliModal.value = true
+}
 
 // ── Cosmic Suggestions ──────────────────────────────────────────────────
 const SUGGESTIONS = [

@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 
 /**
  * useChronicleStore
- * Manages the user's personal astrological prediction timeline.
+ * Manages predictions, saved Kundalis, and saved Palm scans.
  */
 export const useChronicleStore = defineStore('chronicle', () => {
   // ── Mock prediction dataset ─────────────────────────────────────────────
@@ -63,7 +63,6 @@ export const useChronicleStore = defineStore('chronicle', () => {
       fulfilledDate: null,
       astrologerName: 'Aria Moonwhisper',
       astrologerRating: 4.9,
-      // Timeframe Dec 2025 has passed — user can now verify
       timeframeArrived: true,
       daysToFulfill: 45,
     },
@@ -80,37 +79,8 @@ export const useChronicleStore = defineStore('chronicle', () => {
       fulfilledDate: null,
       astrologerName: 'Sol Vega',
       astrologerRating: 4.7,
-      // Timeframe Jan-Feb 2026 has passed — user can now verify
       timeframeArrived: true,
       daysToFulfill: 67,
-    },
-    {
-      id: 6,
-      category: 'Creativity',
-      categoryIcon: '🎨',
-      title: 'Your magnum opus demands to be born',
-      description:
-        'Neptune sextile your natal Sun dissolves creative blocks built over years. A project you abandoned resurfaces with new clarity. The world is ready for what only you can create.',
-      timeframe: 'Mar 2026',
-      planet: 'Neptune',
-      status: 'locked',
-      fulfilledDate: null,
-      astrologerName: 'Celeste Nadir',
-      astrologerRating: 5.0,
-    },
-    {
-      id: 7,
-      category: 'Spirituality',
-      categoryIcon: '🔮',
-      title: 'A lunar eclipse catalyses your awakening',
-      description:
-        'The full moon lunar eclipse in Scorpio falls exactly on your natal Pluto. What you release in this moment liberates you from a karmic pattern spanning multiple lifetimes.',
-      timeframe: 'Apr 2026',
-      planet: 'Pluto',
-      status: 'locked',
-      fulfilledDate: null,
-      astrologerName: 'Aria Moonwhisper',
-      astrologerRating: 4.9,
     },
   ])
 
@@ -131,11 +101,6 @@ export const useChronicleStore = defineStore('chronicle', () => {
     return predictions.value.filter((p) => p.category === activeFilter.value)
   })
 
-  // ── Manifestation Score ─────────────────────────────────────────────────
-  /**
-   * Score = (fulfilled predictions / total) × 100, rounded.
-   * Weighted so each fulfilled prediction contributes equally.
-   */
   const manifestationScore = computed(() => {
     const total = predictions.value.length
     if (total === 0) return 0
@@ -151,7 +116,97 @@ export const useChronicleStore = defineStore('chronicle', () => {
     () => predictions.value.filter((p) => p.status === 'locked').length,
   )
 
-  // ── Actions ─────────────────────────────────────────────────────────────
+  // ── Saved Kundalis & Palm Scans with localStorage Sync ───────────────────
+  const initialKundalis = [
+    {
+      id: 'k-101',
+      name: 'Rahul Singh',
+      relation: 'Self (Primary)',
+      dob: '1994-06-14',
+      tob: '06:32 AM',
+      pob: 'Delhi, India',
+      gender: 'Male',
+      lagna: 'Gemini (Mithuna)',
+      sunSign: 'Leo (Simha)',
+      moonSign: 'Scorpio (Vrischika)',
+      nakshatra: 'Jyeshtha — Pada 2',
+      dasha: 'Mercury (2024–2041)',
+      generatorType: 'AI Generated',
+      createdAt: '18 Aug 2026',
+    },
+    {
+      id: 'k-102',
+      name: 'Priya Sharma',
+      relation: 'Partner',
+      dob: '1996-11-20',
+      tob: '08:15 AM',
+      pob: 'Mumbai, India',
+      gender: 'Female',
+      lagna: 'Cancer (Karka)',
+      sunSign: 'Scorpio (Vrischika)',
+      moonSign: 'Pisces (Revati)',
+      nakshatra: 'Revati — Pada 4',
+      dasha: 'Venus (2022–2042)',
+      generatorType: 'Handcrafted by Pandit Rameshwar',
+      createdAt: '10 Aug 2026',
+    },
+  ]
+
+  const initialPalmScans = [
+    {
+      id: 'ps-101',
+      name: 'Rahul Singh - 5 Angle Palm Scan',
+      createdAt: '18 Aug 2026',
+      vitality: '94% Vitality Index',
+      heartLine: 'High Venusian Empathy',
+      headLine: 'Deep Analytical Curve',
+    }
+  ]
+
+  const savedKundalis = ref(
+    JSON.parse(localStorage.getItem('saved_kundalis')) || initialKundalis
+  )
+
+  const savedPalmScans = ref(
+    JSON.parse(localStorage.getItem('saved_palm_scans')) || initialPalmScans
+  )
+
+  function saveKundalisToStorage() {
+    localStorage.setItem('saved_kundalis', JSON.stringify(savedKundalis.value))
+  }
+
+  function savePalmScansToStorage() {
+    localStorage.setItem('saved_palm_scans', JSON.stringify(savedPalmScans.value))
+  }
+
+  function addKundali(kundali) {
+    savedKundalis.value.unshift({
+      ...kundali,
+      id: 'k-' + Date.now(),
+      createdAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+    })
+    saveKundalisToStorage()
+  }
+
+  function deleteKundali(id) {
+    savedKundalis.value = savedKundalis.value.filter((k) => k.id !== id)
+    saveKundalisToStorage()
+  }
+
+  function addPalmScan(scan) {
+    savedPalmScans.value.unshift({
+      ...scan,
+      id: 'ps-' + Date.now(),
+      createdAt: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+    })
+    savePalmScansToStorage()
+  }
+
+  function deletePalmScan(id) {
+    savedPalmScans.value = savedPalmScans.value.filter((s) => s.id !== id)
+    savePalmScansToStorage()
+  }
+
   function setFilter(filter) {
     activeFilter.value = filter
   }
@@ -169,10 +224,6 @@ export const useChronicleStore = defineStore('chronicle', () => {
     }
   }
 
-  /**
-   * Bulk-insert predictions generated by the AI Importer.
-   * Each entry receives a unique numeric id based on current timestamp.
-   */
   function addImportedPredictions(newPredictions) {
     const base = Date.now()
     newPredictions.forEach((pred, i) => {
@@ -195,6 +246,12 @@ export const useChronicleStore = defineStore('chronicle', () => {
     manifestationScore,
     fulfilledCount,
     lockedCount,
+    savedKundalis,
+    savedPalmScans,
+    addKundali,
+    deleteKundali,
+    addPalmScan,
+    deletePalmScan,
     setFilter,
     fulfillPrediction,
     addImportedPredictions,
