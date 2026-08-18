@@ -1,6 +1,6 @@
 <template>
   <!-- ── Full-screen overlay ──────────────────────────────────────────────── -->
-  <Teleport to="body">
+  <Teleport to="#phone-screen">
     <div class="modal-overlay" @click.self="emit('close')" role="dialog" aria-modal="true" :aria-label="`${prediction.category} prediction verified`">
 
       <!-- ── Close button ──────────────────────────────────────────────────── -->

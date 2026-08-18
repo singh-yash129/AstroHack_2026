@@ -19,46 +19,28 @@ html {
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background: #030712;
   color: #e8eaf6;
-  min-height: 100dvh;
-  overflow-x: hidden;
 }
 
-/* ── Starfield background layer ─────────────────────────────────────────── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    radial-gradient(1px 1px at 10% 20%, rgba(251,191,36,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 25% 75%, rgba(255,255,255,0.5) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 50% 10%, rgba(251,191,36,0.8) 0%, transparent 100%),
-    radial-gradient(1px 1px at 70% 55%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 85% 30%, rgba(167,139,250,0.7) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 40% 90%, rgba(255,255,255,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 90% 80%, rgba(251,191,36,0.5) 0%, transparent 100%),
-    radial-gradient(2px 2px at 60% 40%, rgba(167,139,250,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 15% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 75% 85%, rgba(251,191,36,0.5) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Nebula colour overlay */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
+/* Subtle starfield inside the phone screen */
+.screen-app {
   background:
-    radial-gradient(ellipse at 15% 50%, rgba(109,40,217,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse at 85% 15%, rgba(30,58,138,0.18) 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 100%, rgba(109,40,217,0.08) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
+    radial-gradient(1px 1px at 10% 20%, rgba(251,191,36,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 75%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 12%, rgba(251,191,36,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 55%, rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 32%, rgba(167,139,250,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 40% 88%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 78%, rgba(251,191,36,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 58%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(ellipse at 15% 50%, rgba(109,40,217,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 15%, rgba(30,58,138,0.14) 0%, transparent 55%),
+    linear-gradient(160deg, #04020e 0%, #070514 40%, #060311 100%);
 }
 
 #app {
+  width: 100%;
+  height: 100%;
   position: relative;
   z-index: 1;
 }
@@ -109,7 +91,7 @@ body::after {
 
 /* ── Shared view layout classes ─────────────────────────────────────────── */
 .view-page {
-  min-height: calc(100dvh - 72px);
+  min-height: 100%;
   padding: 1.5rem 1.25rem 2rem;
   display: flex;
   flex-direction: column;

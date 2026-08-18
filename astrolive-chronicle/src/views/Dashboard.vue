@@ -1,5 +1,5 @@
 <template>
-  <section class="dash-view">
+  <section class="dash-view chronicle-view">
 
     <!-- ══════════════════════════════════════════════════════════════════
          HEADER — matches other page headers
@@ -264,6 +264,11 @@ const RECENT_ACTIVITY = [
 /* ── Page shell ─────────────────────────────────────────────────────── */
 .dash-view {
   padding: 1.5rem 0 1rem 0;
+}
+
+.page-header {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }
 
 

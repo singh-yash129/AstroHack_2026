@@ -1,5 +1,5 @@
 <template>
-  <Teleport to="body">
+  <Teleport to="#phone-screen">
     <!-- ── Backdrop ──────────────────────────────────────────────────────── -->
     <Transition name="backdrop-fade">
       <div

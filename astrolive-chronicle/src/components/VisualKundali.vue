@@ -73,7 +73,7 @@
     </div>
 
     <!-- Planet Placement Bottom Sheet -->
-    <Teleport to="body">
+    <Teleport to="#phone-screen">
       <!-- Backdrop -->
       <Transition name="bs-backdrop-fade">
         <div

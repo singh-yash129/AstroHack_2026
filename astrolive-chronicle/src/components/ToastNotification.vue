@@ -1,5 +1,5 @@
 <template>
-  <Teleport to="body">
+  <Teleport to="#phone-screen">
     <Transition name="toast">
       <div
         v-if="visible"

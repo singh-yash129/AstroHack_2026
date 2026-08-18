@@ -81,7 +81,7 @@
     <div style="height: 1rem" aria-hidden="true" />
 
     <!-- ── Confetti canvas ─────────────────────────────────────────────── -->
-    <Teleport to="body">
+    <Teleport to="#phone-screen">
       <ConfettiCanvas v-if="showConfetti" @done="showConfetti = false" />
     </Teleport>
 

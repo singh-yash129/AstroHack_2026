@@ -1,106 +1,110 @@
 <template>
   <section class="view-page astro-ai-view">
 
-    <!-- ── Header Banner ─────────────────────────────────────────────── -->
-    <header class="ai-header">
-      <div class="ai-avatar-ring">
-        <div class="ai-avatar">✨</div>
-        <span class="ai-pulse-dot" />
-      </div>
+    <!-- Scrollable area: header + suggestions + messages -->
+    <div class="ai-scroll-area">
 
-      <div class="ai-title-box">
-        <span class="ai-badge"><span class="sparkle">✦</span> ASTRO AI 2.0</span>
-        <h1 class="ai-title">Cosmic Intelligence</h1>
-        <p class="ai-subtitle">Ask horoscopes, transits, Kundli &amp; remedies</p>
-      </div>
+      <!-- ── Header Banner ─────────────────────────────────────────────── -->
+      <header class="ai-header">
+        <div class="ai-avatar-ring">
+          <div class="ai-avatar">✨</div>
+          <span class="ai-pulse-dot" />
+        </div>
 
-      <!-- Astro Live Voice Mode Button (Right Side) -->
-      <button class="live-voice-trigger" @click="startLiveVoiceMode" title="Start Astro Live Voice Session">
-        <span class="red-live-dot" />
-        <svg class="wave-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-          stroke-linecap="round">
-          <line x1="4" y1="10" x2="4" y2="14" />
-          <line x1="8" y1="6" x2="8" y2="18" />
-          <line x1="12" y1="3" x2="12" y2="21" />
-          <line x1="16" y1="7" x2="16" y2="17" />
-          <line x1="20" y1="10" x2="20" y2="14" />
-        </svg>
-        <span>Astro Live</span>
-      </button>
-    </header>
+        <div class="ai-title-box">
+          <span class="ai-badge"><span class="sparkle">✦</span> ASTRO AI 2.0</span>
+          <h1 class="ai-title">Cosmic Intelligence</h1>
+          <p class="ai-subtitle">Ask horoscopes, transits, Kundli &amp; remedies</p>
+        </div>
 
-    <!-- ── Topic Suggestions Horizontal Scroll Container ────────────── -->
-    <div v-if="messages.length === 0" class="suggestions-section">
-      <div class="section-header-row">
-        <p class="section-label">⚡ QUICK ASTROLOGICAL QUERIES</p>
-        <span class="scroll-hint">Swipe &rarr;</span>
-      </div>
-      <div class="suggestions-scroll-container">
-        <button v-for="s in SUGGESTIONS" :key="s.title" class="suggestion-card" @click="askQuestion(s.query)">
-          <span class="sug-icon">{{ s.icon }}</span>
-          <div class="sug-info">
-            <span class="sug-title">{{ s.title }}</span>
-            <span class="sug-desc">{{ s.desc }}</span>
-          </div>
+        <!-- Astro Live Voice Mode Button (Right Side) -->
+        <button class="live-voice-trigger" @click="startLiveVoiceMode" title="Start Astro Live Voice Session">
+          <span class="red-live-dot" />
+          <svg class="wave-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round">
+            <line x1="4" y1="10" x2="4" y2="14" />
+            <line x1="8" y1="6" x2="8" y2="18" />
+            <line x1="12" y1="3" x2="12" y2="21" />
+            <line x1="16" y1="7" x2="16" y2="17" />
+            <line x1="20" y1="10" x2="20" y2="14" />
+          </svg>
+          <span>Astro Live</span>
         </button>
-      </div>
-    </div>
+      </header>
 
-    <!-- ── Chat Messages Stream ──────────────────────────────────────── -->
-    <div class="chat-messages" ref="messagesContainer">
-      <TransitionGroup name="bubble">
-        <div v-for="msg in messages" :key="msg.id" class="msg-row"
-          :class="msg.sender === 'user' ? 'msg-row--user' : 'msg-row--ai'">
-          <!-- Avatar -->
-          <div v-if="msg.sender === 'ai'" class="msg-avatar">✨</div>
-
-          <!-- Bubble -->
-          <div class="msg-bubble" :class="msg.sender === 'user' ? 'bubble--user' : 'bubble--ai'">
-            <div class="msg-content" v-html="formatMarkdown(msg.text)" />
-
-            <!-- Planetary breakdown pill -->
-            <div v-if="msg.planetaryInsight" class="planetary-card">
-              <div class="planet-row">
-                <span class="planet-badge">🪐 {{ msg.planetaryInsight.planet }}</span>
-                <span class="house-badge">House {{ msg.planetaryInsight.house }}</span>
-              </div>
-              <p class="planet-detail">{{ msg.planetaryInsight.detail }}</p>
+      <!-- ── Topic Suggestions Horizontal Scroll Container ────────────── -->
+      <div v-if="messages.length === 0" class="suggestions-section">
+        <div class="section-header-row">
+          <p class="section-label">⚡ QUICK ASTROLOGICAL QUERIES</p>
+          <span class="scroll-hint">Swipe &rarr;</span>
+        </div>
+        <div class="suggestions-scroll-container">
+          <button v-for="s in SUGGESTIONS" :key="s.title" class="suggestion-card" @click="askQuestion(s.query)">
+            <span class="sug-icon">{{ s.icon }}</span>
+            <div class="sug-info">
+              <span class="sug-title">{{ s.title }}</span>
+              <span class="sug-desc">{{ s.desc }}</span>
             </div>
-
-            <button
-              v-if="msg.sender === 'ai' && msg.prediction"
-              class="pin-chronicle-btn"
-              :class="{ 'pinned': msg.isPinned }"
-              @click="pinToChronicle(msg)"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="11" width="18" height="11" rx="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-              <span>{{ msg.isPinned ? 'Saved to Chronicle! ✨' : 'Save Prediction to Chronicle' }}</span>
-            </button>
-
-            <!-- Speaker TTS Button -->
-            <button v-if="msg.sender === 'ai'" class="speak-msg-btn" @click="speakText(msg.text)"
-              title="Listen to AI voice">
-              🔊 Read aloud
-            </button>
-
-            <span class="msg-time">{{ msg.time }}</span>
-          </div>
+          </button>
         </div>
+      </div>
 
-        <!-- Typing indicator -->
-        <div v-if="isTyping" key="typing" class="msg-row msg-row--ai">
-          <div class="msg-avatar">✨</div>
-          <div class="msg-bubble bubble--ai bubble--typing">
-            <span class="typing-dot" /><span class="typing-dot" /><span class="typing-dot" />
-            <span class="typing-text">Synthesizing planetary transits…</span>
+      <!-- ── Chat Messages Stream ──────────────────────────────────────── -->
+      <div class="chat-messages" ref="messagesContainer">
+        <TransitionGroup name="bubble">
+          <div v-for="msg in messages" :key="msg.id" class="msg-row"
+            :class="msg.sender === 'user' ? 'msg-row--user' : 'msg-row--ai'">
+            <!-- Avatar -->
+            <div v-if="msg.sender === 'ai'" class="msg-avatar">✨</div>
+
+            <!-- Bubble -->
+            <div class="msg-bubble" :class="msg.sender === 'user' ? 'bubble--user' : 'bubble--ai'">
+              <div class="msg-content" v-html="formatMarkdown(msg.text)" />
+
+              <!-- Planetary breakdown pill -->
+              <div v-if="msg.planetaryInsight" class="planetary-card">
+                <div class="planet-row">
+                  <span class="planet-badge">🪐 {{ msg.planetaryInsight.planet }}</span>
+                  <span class="house-badge">House {{ msg.planetaryInsight.house }}</span>
+                </div>
+                <p class="planet-detail">{{ msg.planetaryInsight.detail }}</p>
+              </div>
+
+              <button
+                v-if="msg.sender === 'ai' && msg.prediction"
+                class="pin-chronicle-btn"
+                :class="{ 'pinned': msg.isPinned }"
+                @click="pinToChronicle(msg)"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <span>{{ msg.isPinned ? 'Saved to Chronicle! ✨' : 'Save Prediction to Chronicle' }}</span>
+              </button>
+
+              <!-- Speaker TTS Button -->
+              <button v-if="msg.sender === 'ai'" class="speak-msg-btn" @click="speakText(msg.text)"
+                title="Listen to AI voice">
+                🔊 Read aloud
+              </button>
+
+              <span class="msg-time">{{ msg.time }}</span>
+            </div>
           </div>
-        </div>
-      </TransitionGroup>
-      <div ref="scrollAnchor" style="height: 1px;" />
-    </div>
+
+          <!-- Typing indicator -->
+          <div v-if="isTyping" key="typing" class="msg-row msg-row--ai">
+            <div class="msg-avatar">✨</div>
+            <div class="msg-bubble bubble--ai bubble--typing">
+              <span class="typing-dot" /><span class="typing-dot" /><span class="typing-dot" />
+              <span class="typing-text">Synthesizing planetary transits…</span>
+            </div>
+          </div>
+        </TransitionGroup>
+        <div ref="scrollAnchor" style="height: 1px;" />
+      </div>
+    </div><!-- /ai-scroll-area -->
 
     <!-- ── Chat & Voice Input Bar ───────────────────────────────────── -->
     <div class="input-container">
@@ -148,7 +152,7 @@
     <!-- ═════════════════════════════════════════════════════════════════
          Astro LIVE VOICE MODE OVERLAY (Full-screen interactive prototype)
     ═════════════════════════════════════════════════════════════════ -->
-    <Teleport to="body">
+    <Teleport to="#phone-screen">
       <Transition name="live-fade">
         <div v-if="liveVoiceOpen" class="live-voice-overlay">
           <!-- Background stars & blur -->
@@ -524,9 +528,28 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  min-height: calc(100vh - 80px);
-  padding: 1rem 0.85rem 6.5rem 0.85rem;
+  padding: 0;
   box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Give the view-page wrapper full height too */
+.view-page.astro-ai-view {
+  padding: 0;
+  gap: 0;
+  min-height: 100%;
+}
+
+.ai-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0.85rem 0.5rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+}
+.ai-scroll-area::-webkit-scrollbar {
+  display: none;
 }
 
 /* ── Header Banner ───────────────────────────────────────────────── */
@@ -927,20 +950,17 @@ onUnmounted(() => {
   display: inline-block;
 }
 
-/* ── Input Bar Container ─────────────────────────────────────────── */
+/* ── Input Bar Container — flex child, sits above nav ────────────── */
 .input-container {
-  position: fixed;
-  bottom: 72px;
-  left: 50%;
-  transform: translateX(-50%);
+  flex-shrink: 0;
   width: 100%;
-  max-width: 480px;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(15px);
+  background: rgba(15, 23, 42, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid rgba(139, 92, 246, 0.2);
-  padding: 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem 0.6rem;
   box-sizing: border-box;
-  z-index: 90;
+  z-index: 10;
 }
 
 .quick-prompts-bar {
@@ -1078,7 +1098,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 1.5rem 1.25rem 2.5rem 1.25rem;
+  padding: 3.25rem 1.25rem 2.5rem 1.25rem;
   box-sizing: border-box;
 }
 

@@ -1,13 +1,266 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>astrolive-chronicle</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AstroLive Chronicle</title>
+  <style>
+    /* ── Reset ────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #e8eaf6;
+      background: #04020e;
+    }
+
+    /* ── Full-screen stage ────────────────────────────────────────────── */
+    .device-stage {
+      width: 100vw;
+      height: 100dvh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 1.5rem 1rem 1rem;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 60% 55% at 18% 50%, rgba(109,40,217,0.16) 0%, transparent 70%),
+        radial-gradient(ellipse 55% 55% at 82% 50%, rgba(251,191,36,0.09) 0%, transparent 70%),
+        linear-gradient(160deg, #04020e 0%, #070514 45%, #060311 100%);
+    }
+
+    /* Ambient glows */
+    .glow {
+      position: fixed;
+      width: 480px; height: 480px;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow--l { left:-140px; top:50%; transform:translateY(-50%); background:radial-gradient(circle,rgba(109,40,217,.22) 0%,transparent 70%); }
+    .glow--r { right:-140px;top:50%; transform:translateY(-50%); background:radial-gradient(circle,rgba(251,191,36,.13) 0%,transparent 70%); }
+
+    /* ── iPhone 15 Pro frame ─────────────────────────────────────────── */
+    .iphone-frame {
+      position: relative;
+      width: 393px;
+      height: 852px;
+      border-radius: 54px;
+      flex-shrink: 0;
+      transform-origin: top center;
+      z-index: 1;
+      /* Titanium finish */
+      background: linear-gradient(
+        148deg,
+        #2a2a2c 0%, #3d3d3f 12%, #1c1c1e 28%,
+        #3a3a3c 48%, #1e1e20 68%, #2a2a2c 85%, #3d3d3f 100%
+      );
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.09),
+        0 0 0 2.5px rgba(0,0,0,0.65),
+        0 32px 90px rgba(0,0,0,0.75),
+        0 8px 30px rgba(0,0,0,0.5),
+        0 0 70px rgba(109,40,217,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.13),
+        inset 0 -1px 0 rgba(0,0,0,0.4);
+    }
+
+    /* Side buttons */
+    .sb { position:absolute; background:linear-gradient(90deg,#262628,#3a3a3c,#262628); border-radius:3px; box-shadow:-1px 0 4px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05); }
+    .sb-mute   { left:-3px; top:148px; width:4px; height:30px; }
+    .sb-volu   { left:-3px; top:196px; width:4px; height:62px; }
+    .sb-vold   { left:-3px; top:274px; width:4px; height:62px; }
+    .sb-power  { right:-3px;top:224px; width:4px; height:82px; box-shadow:1px 0 4px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.05); }
+
+    /* ── Screen ──────────────────────────────────────────────────────── */
+    .iphone-screen {
+      position: absolute;
+      top: 8px; left: 8px; right: 8px; bottom: 8px;
+      border-radius: 47px;
+      background: #060311;
+      overflow: hidden;
+      /* KEY — creates new fixed-position containing block for Vue fixed elements */
+      transform: translate(0, 0);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04),
+                  inset 0 0 30px rgba(0,0,0,0.7);
+    }
+
+    /* Dynamic Island */
+    .dynamic-island {
+      position: absolute;
+      top: 11px; left: 50%; transform: translateX(-50%);
+      width: 119px; height: 34px;
+      background: #000;
+      border-radius: 18px;
+      z-index: 300;
+      display: flex; align-items: center; justify-content: flex-end; padding-right:13px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 2px 8px rgba(0,0,0,.6);
+    }
+    .di-cam {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #1a1a2e, #06060e);
+      border: 1px solid rgba(255,255,255,.07);
+      box-shadow: inset 0 0 4px rgba(0,80,255,.3), 0 0 4px rgba(0,100,255,.15);
+    }
+
+    /* Status bar */
+    .status-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 54px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      padding: 0 24px 9px;
+      z-index: 200; pointer-events: none;
+    }
+    .sb-time {
+      font-family: -apple-system,'SF Pro Display','Inter',sans-serif;
+      font-size: 15px; font-weight: 600; color: #f1f5f9; letter-spacing: -.02em;
+    }
+    .sb-right { display:flex; align-items:center; gap:5px; }
+
+    /* Signal bars */
+    .signal { display:flex; align-items:flex-end; gap:1.5px; }
+    .signal span { background:#f1f5f9; border-radius:1px; width:3px; }
+    .signal span:nth-child(1){height:4px;opacity:.35}
+    .signal span:nth-child(2){height:6px;opacity:.6}
+    .signal span:nth-child(3){height:8px;opacity:.8}
+    .signal span:nth-child(4){height:10px;}
+
+    /* WiFi */
+    .wifi { width:15px; height:11px; position:relative; display:flex; align-items:center; justify-content:center; }
+    .wifi::before,.wifi::after,.wifi-dot {
+      content:''; position:absolute; left:50%; transform:translateX(-50%);
+      border:1.5px solid #f1f5f9; background:transparent;
+    }
+    .wifi::before { width:15px;height:9px;top:0;border-bottom:none;border-radius:9px 9px 0 0;opacity:.4; }
+    .wifi::after  { width:9px; height:6px;top:2px;border-bottom:none;border-radius:6px 6px 0 0;opacity:.7; }
+    .wifi-dot { width:3px;height:3px;background:#f1f5f9;border:none;border-radius:50%;bottom:0; }
+
+    /* Battery */
+    .batt { display:flex; align-items:center; gap:1px; }
+    .batt-body { width:22px;height:11px;border:1.5px solid rgba(255,255,255,.5);border-radius:3px;padding:1.5px;display:flex; }
+    .batt-fill { flex:0.82; background:#4ade80; border-radius:1.5px; }
+    .batt-tip  { width:2px;height:5px;background:rgba(255,255,255,.4);border-radius:0 1px 1px 0;align-self:center; }
+
+    /* ── App content area (below status bar, above home bar) ─────────── */
+    .screen-app {
+      position: absolute;
+      top: 54px; left: 0; right: 0; bottom: 22px;
+      overflow: hidden;
+    }
+
+    /* Vue mounts here */
+    #app {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Home indicator */
+    .home-bar {
+      position: absolute;
+      bottom: 6px; left: 50%; transform: translateX(-50%);
+      width: 128px; height: 5px;
+      border-radius: 99px;
+      background: rgba(255,255,255,.27);
+      z-index: 200;
+    }
+
+    /* Glass reflection */
+    .screen-glare {
+      position: absolute;
+      top: 8px; left: 8px;
+      width: calc(48% - 8px); bottom: 8px;
+      border-radius: 47px 0 0 47px;
+      background: linear-gradient(135deg, rgba(255,255,255,.045) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 400;
+    }
+
+    /* ── Real mobile: strip frame ─────────────────────────────────────── */
+    @media (max-width: 500px) {
+      .device-stage { padding: 0; background: #060311; }
+      .glow { display: none; }
+      .iphone-frame { width:100vw; height:100dvh; border-radius:0; background:#060311; box-shadow:none; transform:none !important; }
+      .sb { display: none; }
+      .iphone-screen { top:0;left:0;right:0;bottom:0; border-radius:0; }
+      .dynamic-island,.status-bar,.home-bar,.screen-glare { display: none; }
+      .screen-app { top:0; bottom:0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="device-stage">
+    <!-- Ambient glows -->
+    <div class="glow glow--l"></div>
+    <div class="glow glow--r"></div>
+
+    <!-- iPhone frame -->
+    <div class="iphone-frame" id="phone-frame">
+
+      <!-- Side buttons -->
+      <div class="sb sb-mute"></div>
+      <div class="sb sb-volu"></div>
+      <div class="sb sb-vold"></div>
+      <div class="sb sb-power"></div>
+
+      <!-- Screen -->
+      <div class="iphone-screen" id="phone-screen">
+
+        <!-- Dynamic Island -->
+        <div class="dynamic-island"><div class="di-cam"></div></div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+          <span class="sb-time">9:41</span>
+          <div class="sb-right">
+            <div class="signal">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="wifi"><div class="wifi-dot"></div></div>
+            <div class="batt">
+              <div class="batt-body"><div class="batt-fill"></div></div>
+              <div class="batt-tip"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vue App -->
+        <div class="screen-app">
+          <div id="app"></div>
+        </div>
+
+        <!-- Home indicator -->
+        <div class="home-bar"></div>
+      </div>
+
+      <!-- Glass glare -->
+      <div class="screen-glare"></div>
+    </div>
+  </div>
+
+  <!-- Auto-scale phone to fit viewport height -->
+  <script>
+    (function () {
+      var frame = document.getElementById('phone-frame');
+      function scale() {
+        if (!frame || window.innerWidth <= 500) return;
+        var pad = 48; // top + bottom stage padding in px
+        var s = Math.min(1, (window.innerHeight - pad) / 852);
+        frame.style.transform = 'scale(' + s.toFixed(4) + ')';
+        frame.style.transformOrigin = 'top center';
+        // Pull up empty space left by downscaling
+        frame.style.marginBottom = ((s - 1) * 852).toFixed(1) + 'px';
+      }
+      scale();
+      window.addEventListener('resize', scale);
+    })();
+  </script>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
 </html>

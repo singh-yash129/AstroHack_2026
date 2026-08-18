@@ -1,5 +1,5 @@
 <template>
-  <Teleport to="body">
+  <Teleport to="#phone-screen">
     <div
       class="tip-overlay"
       @click.self="emit('close')"
