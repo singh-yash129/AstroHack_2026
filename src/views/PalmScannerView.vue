@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="palm-scanner-view">
 
     <!-- ── Header Bar ─────────────────────────────────────────────────── -->
@@ -10,17 +10,30 @@
         </svg>
       </button>
 
-      <div class="ps-header-title">
-        <h1>Futuristic AI Palm Scanner</h1>
-        <p v-if="phase === 'capture'">Photo {{ currentStep }} of 5 &bull; {{ stepGuides[currentStep - 1].title }}</p>
-        <p v-else-if="phase === 'scanning'">Cyan Neural HUD Scanning…</p>
-        <p v-else>Scan Complete</p>
+      <div class="ps-header-center">
+        <div class="ps-icon-wrap">
+          <span class="ps-icon-glyph">✋</span>
+          <span class="ps-icon-ring"></span>
+        </div>
+        <div class="ps-title-group">
+          <h1 class="ps-title">AI Palm Scanner</h1>
+          <p class="ps-subtitle" v-if="phase === 'capture'">
+            <span class="ps-phase-dot capture-dot"></span>
+            Capture {{ currentStep }}/5 &bull; {{ stepGuides[currentStep - 1].title }}
+          </p>
+          <p class="ps-subtitle" v-else-if="phase === 'scanning'">
+            <span class="ps-phase-dot scan-dot"></span>Neural Mesh Active
+          </p>
+          <p class="ps-subtitle" v-else>
+            <span class="ps-phase-dot done-dot"></span>Analysis Complete
+          </p>
+        </div>
       </div>
 
-      <div class="ps-step-badge">
+      <div class="ps-step-badge" :class="{ 'badge-scan': phase === 'scanning', 'badge-done': phase === 'complete' }">
         <span v-if="phase === 'capture'">{{ currentStep }}/5</span>
-        <span v-else-if="phase === 'scanning'">⚡ CYAN HUD</span>
-        <span v-else>✓ DONE</span>
+        <span v-else-if="phase === 'scanning'">⚡</span>
+        <span v-else>✓</span>
       </div>
     </header>
 
@@ -567,38 +580,126 @@ function resetScan() {
 }
 
 /* ── Header Bar ─────────────────────────────────────────────────────── */
+/* ── Premium Header Redesign ─────────────────────────────────────── */
 .ps-header {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  gap: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  background: linear-gradient(135deg, rgba(6,20,45,0.92) 0%, rgba(4,12,30,0.96) 100%);
+  border: 1px solid rgba(6,182,212,0.25);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 14px rgba(0,242,254,0.08);
+  margin-bottom: 0.65rem;
+  overflow: hidden;
+  min-height: 48px;
 }
 .ps-back-btn {
-  width: 36px; height: 36px;
+  width: 32px; height: 32px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #f1f5f9;
+  background: rgba(6,182,212,0.1);
+  border: 1px solid rgba(6,182,212,0.3);
+  color: #00f2fe;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
-.ps-back-btn svg { width: 18px; height: 18px; }
+.ps-back-btn:hover { background: rgba(6,182,212,0.2); border-color: #06b6d4; }
+.ps-back-btn svg { width: 15px; height: 15px; }
 
-.ps-header-title { flex: 1; }
-.ps-header-title h1 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.15rem; font-weight: 800; color: #f1f5f9; line-height: 1.1;
+.ps-header-center {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 1;
+  min-width: 0;
 }
-.ps-header-title p {
-  font-size: 0.68rem; color: rgba(226,232,240,0.6); margin-top: 0.15rem;
+
+.ps-icon-wrap {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ps-icon-glyph {
+  font-size: 1.15rem;
+  filter: drop-shadow(0 0 6px rgba(0,242,254,0.7));
+  z-index: 2;
+  position: relative;
+}
+.ps-icon-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  background: conic-gradient(from 0deg, #00f2fe, #06b6d4, #38bdf8, #00f2fe) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: rotateRing 3s linear infinite;
+}
+@keyframes rotateRing {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ps-title-group { min-width: 0; }
+.ps-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #ffffff 0%, #a5f3fc 60%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  margin: 0;
+}
+.ps-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.6rem;
+  color: rgba(165,243,252,0.75);
+  margin-top: 0.08rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ps-phase-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+}
+.capture-dot { background: #fbbf24; box-shadow: 0 0 5px #fbbf24; }
+.scan-dot { background: #00f2fe; box-shadow: 0 0 5px #00f2fe; animation: dotPulse 1s ease infinite; }
+.done-dot { background: #4ade80; box-shadow: 0 0 5px #4ade80; }
+@keyframes dotPulse {
+  0%,100% { opacity: 1; } 50% { opacity: 0.4; }
 }
 
 .ps-step-badge {
-  font-size: 0.65rem; font-weight: 800;
-  color: #06b6d4;
-  background: rgba(6, 182, 212, 0.12);
-  border: 1px solid rgba(6, 182, 212, 0.35);
-  padding: 0.2rem 0.6rem; border-radius: 999px;
+  font-size: 0.6rem; font-weight: 800;
+  color: #00f2fe;
+  background: rgba(0,242,254,0.1);
+  border: 1px solid rgba(0,242,254,0.3);
+  padding: 0.15rem 0.5rem; border-radius: 999px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+.ps-step-badge.badge-scan {
+  color: #38bdf8;
+  background: rgba(56,189,248,0.15);
+  border-color: rgba(56,189,248,0.4);
+  box-shadow: 0 0 10px rgba(56,189,248,0.3);
+}
+.ps-step-badge.badge-done {
+  color: #4ade80;
+  background: rgba(74,222,128,0.1);
+  border-color: rgba(74,222,128,0.35);
 }
 
 /* ── Progress Step Bar ──────────────────────────────────────────────── */

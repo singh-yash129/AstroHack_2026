@@ -1,37 +1,39 @@
-<template>
+﻿<template>
   <section class="view-page astro-ai-view">
 
     <!-- Scrollable area: header + suggestions + messages -->
     <div class="ai-scroll-area">
 
       <!-- ── Sleek Compact Low-Height Header Banner ─────────────────────────────── -->
+      <!-- ── Premium Redesigned AI Header ─────────────────────────────── -->
       <header class="ai-header">
-        <!-- Glowing Orbit Avatar Ring -->
+        <!-- Ambient glow background -->
+        <div class="ai-header-glow"></div>
+        <!-- Avatar with spinning orbit ring -->
         <div class="ai-avatar-wrap">
-          <div class="ai-avatar-orbit-ring" />
+          <div class="ai-avatar-orbit-ring"></div>
           <div class="ai-avatar-core">
             <span class="ai-avatar-emoji">🔮</span>
           </div>
-          <span class="ai-pulse-dot" title="Astro AI Online" />
+          <span class="ai-pulse-dot" title="Astro AI Online"></span>
         </div>
-
+        <!-- Title & badge -->
         <div class="ai-title-box">
           <div class="ai-title-row">
-            <h1 class="ai-title">Cosmic AI</h1>
+            <h1 class="ai-title">Astro AI</h1>
             <span class="ai-badge">✦ 2.0</span>
           </div>
           <p class="ai-subtitle">Horoscopes • Transits • Kundli</p>
         </div>
-
-        <!-- Astro Live Voice Mode Trigger Button -->
+        <!-- Live Voice Button -->
         <button class="live-voice-trigger" @click="startLiveVoiceMode" title="Start Astro Live Voice Session">
-          <span class="red-live-dot" />
+          <span class="red-live-dot"></span>
           <div class="live-wave-bars">
-            <span class="bar bar-1" />
-            <span class="bar bar-2" />
-            <span class="bar bar-3" />
+            <span class="bar bar-1"></span>
+            <span class="bar bar-2"></span>
+            <span class="bar bar-3"></span>
           </div>
-          <span class="live-btn-text">Live Voice</span>
+          <span class="live-btn-text">Live</span>
         </button>
       </header>
 
@@ -570,25 +572,30 @@ onUnmounted(() => {
   display: none;
 }
 
-/* ── Sleek Compact Low-Height Header Banner ─────────────────────────────── */
+/* ── Premium AI Header Redesign ─────────────────────────────── */
 .ai-header {
   position: relative;
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.45rem 0.75rem;
-  background: linear-gradient(135deg, rgba(23, 14, 48, 0.9) 0%, rgba(13, 20, 48, 0.95) 100%);
-  border: 1px solid rgba(192, 132, 252, 0.28);
-  border-radius: 0.9rem;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 12px rgba(168, 85, 247, 0.12);
+  padding: 0.45rem 0.7rem;
+  background: linear-gradient(135deg, rgba(15,7,36,0.94) 0%, rgba(9,14,38,0.97) 100%);
+  border: 1px solid rgba(192,132,252,0.22);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45), 0 0 16px rgba(168,85,247,0.1);
   margin-bottom: 0.55rem;
   overflow: hidden;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  min-height: 44px;
+  min-height: 48px;
 }
 
-/* Glowing Orbit Avatar Wrap */
+.ai-header-glow {
+  position: absolute;
+  top: -20px; left: 30%;
+  width: 40%; height: 60px;
+  background: radial-gradient(ellipse, rgba(168,85,247,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
 .ai-avatar-wrap {
   position: relative;
   width: 36px;
@@ -598,53 +605,50 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
 }
-
 .ai-avatar-orbit-ring {
   position: absolute;
   inset: -2px;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, #c084fc, #38bdf8, #fbbf24, #c084fc);
-  animation: rotateOrbit 4s linear infinite;
+  background: conic-gradient(from 0deg, #c084fc, #818cf8, #38bdf8, #fbbf24, #c084fc);
+  animation: rotateOrbit 3.5s linear infinite;
   opacity: 0.9;
 }
-
 @keyframes rotateOrbit {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-
 .ai-avatar-core {
   position: relative;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #1e1138 0%, #0b071a 100%);
+  background: radial-gradient(circle at 35% 35%, #1e1138 0%, #0a0520 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255,255,255,0.12);
   z-index: 2;
 }
-
 .ai-avatar-emoji {
-  font-size: 1.05rem;
-  filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8));
+  font-size: 1rem;
+  filter: drop-shadow(0 0 4px rgba(251,191,36,0.9));
 }
-
 .ai-pulse-dot {
   position: absolute;
-  bottom: -1px;
-  right: -1px;
-  width: 8px;
-  height: 8px;
+  bottom: -1px; right: -1px;
+  width: 8px; height: 8px;
   border-radius: 50%;
   background: #4ade80;
-  border: 1.5px solid #0d1430;
+  border: 1.5px solid #0a0520;
   box-shadow: 0 0 6px #4ade80;
   z-index: 3;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%,100% { box-shadow: 0 0 5px #4ade80; }
+  50% { box-shadow: 0 0 10px #4ade80, 0 0 20px rgba(74,222,128,0.4); }
 }
 
-/* Title Box */
 .ai-title-box {
   display: flex;
   flex-direction: column;
@@ -652,46 +656,42 @@ onUnmounted(() => {
   min-width: 0;
   justify-content: center;
 }
-
 .ai-title-row {
   display: flex;
   align-items: center;
   gap: 0.4rem;
 }
-
 .ai-title {
   font-family: 'Outfit', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 0%, #e9d5ff 50%, #38bdf8 100%);
+  background: linear-gradient(90deg, #ffffff 0%, #e9d5ff 40%, #a5b4fc 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.1;
+  margin: 0;
 }
-
 .ai-badge {
-  font-size: 0.52rem;
+  font-size: 0.5rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: #fbbf24;
-  background: rgba(251, 191, 36, 0.15);
-  border: 1px solid rgba(251, 191, 36, 0.35);
-  padding: 0.08rem 0.38rem;
+  background: rgba(251,191,36,0.12);
+  border: 1px solid rgba(251,191,36,0.35);
+  padding: 0.07rem 0.35rem;
   border-radius: 999px;
   white-space: nowrap;
 }
-
 .ai-subtitle {
-  font-size: 0.6rem;
-  color: rgba(226, 232, 240, 0.6);
-  margin-top: 0.08rem;
+  font-size: 0.58rem;
+  color: rgba(196,181,253,0.7);
+  margin-top: 0.06rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Sleek Compact Live Voice Button */
 .live-voice-trigger {
   position: relative;
   margin-left: auto;
@@ -699,68 +699,57 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.28rem 0.55rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(168, 85, 247, 0.25) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.5);
+  background: linear-gradient(135deg, rgba(239,68,68,0.2) 0%, rgba(168,85,247,0.2) 100%);
+  border: 1px solid rgba(239,68,68,0.45);
   color: #ffffff;
   cursor: pointer;
-  z-index: 2;
-  box-shadow: 0 2px 10px rgba(239, 68, 68, 0.25);
+  box-shadow: 0 2px 10px rgba(239,68,68,0.2);
   transition: all 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
-
 .live-voice-trigger:hover {
   transform: translateY(-1px);
-  border-color: rgba(239, 68, 68, 0.8);
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+  border-color: rgba(239,68,68,0.75);
+  box-shadow: 0 3px 14px rgba(239,68,68,0.38);
 }
-
 .red-live-dot {
-  width: 6px;
-  height: 6px;
+  width: 6px; height: 6px;
   border-radius: 50%;
   background: #ef4444;
   box-shadow: 0 0 6px #ef4444;
   animation: redPulse 1.2s ease-in-out infinite;
   flex-shrink: 0;
 }
-
 @keyframes redPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.3); opacity: 0.6; }
+  0%,100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.6; }
 }
-
 .live-wave-bars {
   display: flex;
   align-items: flex-end;
   gap: 1.5px;
   height: 11px;
 }
-
 .live-wave-bars .bar {
   width: 2px;
-  background: #38bdf8;
+  background: linear-gradient(180deg, #c084fc, #818cf8);
   border-radius: 1px;
-  animation: barEqualizer 1s ease-in-out infinite alternate;
+  animation: barEq 1s ease-in-out infinite alternate;
 }
-
 .bar-1 { height: 50%; animation-delay: 0.1s; }
 .bar-2 { height: 100%; animation-delay: 0.3s; }
-.bar-3 { height: 70%; animation-delay: 0.2s; }
-
-@keyframes barEqualizer {
-  0% { transform: scaleY(0.4); }
+.bar-3 { height: 65%; animation-delay: 0.2s; }
+@keyframes barEq {
+  0% { transform: scaleY(0.35); }
   100% { transform: scaleY(1); }
 }
-
 .live-btn-text {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 800;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
 }
-
 /* ── Suggestions Section (Smooth Horizontal Scrollable) ─────────── */
 .suggestions-section {
   margin-top: 0.3rem;
