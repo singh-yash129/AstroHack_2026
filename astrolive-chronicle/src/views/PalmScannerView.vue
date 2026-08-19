@@ -143,80 +143,95 @@
     ═══════════════════════════════════════════════════════════════════ -->
     <div v-else-if="phase === 'scanning'" class="scanning-container">
 
-      <div class="scanner-viewport cyan-hud">
-        <!-- Sci-Fi HUD Brackets -->
-        <span class="hud-corner hud-tl" />
-        <span class="hud-corner hud-tr" />
-        <span class="hud-corner hud-bl" />
-        <span class="hud-corner hud-br" />
+      <!-- AI Palm Scanner Animated Card -->
+      <div class="scanner-card">
 
-        <!-- Futuristic Rotating Holographic Ring -->
-        <div class="holo-ring" />
-
-        <!-- Cyan Laser Sweep Beam strictly over palm -->
-        <div class="laser-beam cyan-beam" />
-
-        <!-- Real Human Palm Image being scanned -->
-        <img :src="capturedPhotos[0]" alt="Scanning Real Palm" class="scan-base-img" />
-
-        <!-- Cyan Neural Network Interconnected SVG Lines -->
-        <svg class="neural-network-svg" viewBox="0 0 300 400" fill="none">
-          <line x1="80" y1="120" x2="150" y2="90" stroke="rgba(6,182,212,0.6)" stroke-width="1.8" stroke-dasharray="4 2" />
-          <line x1="150" y1="90" x2="220" y2="130" stroke="rgba(6,182,212,0.6)" stroke-width="1.8" stroke-dasharray="4 2" />
-          <line x1="80" y1="120" x2="100" y2="200" stroke="rgba(0,242,254,0.7)" stroke-width="1.8" />
-          <line x1="100" y1="200" x2="180" y2="190" stroke="rgba(34,211,238,0.8)" stroke-width="1.8" />
-          <line x1="180" y1="190" x2="220" y2="130" stroke="rgba(6,182,212,0.6)" stroke-width="1.8" />
-          <line x1="100" y1="200" x2="120" y2="280" stroke="rgba(6,182,212,0.7)" stroke-width="1.8" />
-          <line x1="180" y1="190" x2="170" y2="290" stroke="rgba(0,242,254,0.8)" stroke-width="1.8" />
-          <line x1="120" y1="280" x2="170" y2="290" stroke="rgba(0,242,254,0.9)" stroke-width="1.8" />
-
-          <!-- Cyan Glowing Neural Nodes -->
-          <circle cx="80" cy="120" r="5" fill="#00f2fe" class="neural-node pulse-node" />
-          <circle cx="150" cy="90" r="6" fill="#06b6d4" class="neural-node pulse-node" />
-          <circle cx="220" cy="130" r="5" fill="#22d3ee" class="neural-node pulse-node" />
-          <circle cx="100" cy="200" r="6" fill="#00f2fe" class="neural-node pulse-node" />
-          <circle cx="180" cy="190" r="7" fill="#06b6d4" class="neural-node pulse-node" />
-          <circle cx="120" cy="280" r="6" fill="#22d3ee" class="neural-node pulse-node" />
-          <circle cx="170" cy="290" r="6" fill="#00f2fe" class="neural-node pulse-node" />
+        <!-- background circuit lines + nodes -->
+        <svg class="circuit-bg" viewBox="0 0 480 380" aria-hidden="true">
+          <g stroke="#2e5f7a" stroke-width="1.3" fill="none" opacity="0.5">
+            <path d="M0 40 L50 40 L78 66 L130 66"/>
+            <path d="M0 130 L35 130 L58 108 L100 108"/>
+            <path d="M0 230 L48 230 L72 252 L125 252"/>
+            <path d="M0 320 L40 320 L62 298 L110 298"/>
+            <path d="M480 40 L430 40 L402 66 L350 66"/>
+            <path d="M480 130 L445 130 L422 108 L380 108"/>
+            <path d="M480 230 L432 230 L408 252 L355 252"/>
+            <path d="M480 320 L440 320 L418 298 L370 298"/>
+            <path d="M150 0 L150 30 L178 50"/>
+            <path d="M240 0 L240 20"/>
+            <path d="M330 0 L330 30 L302 50"/>
+            <path d="M160 380 L160 350 L188 330"/>
+            <path d="M320 380 L320 350 L292 330"/>
+          </g>
+          <g fill="#4fd8ff" opacity="0.85">
+            <circle cx="130" cy="66" r="3.2"/><circle cx="100" cy="108" r="3.2"/>
+            <circle cx="125" cy="252" r="3.2"/><circle cx="110" cy="298" r="3.2"/>
+            <circle cx="350" cy="66" r="3.2"/><circle cx="380" cy="108" r="3.2"/>
+            <circle cx="355" cy="252" r="3.2"/><circle cx="370" cy="298" r="3.2"/>
+            <circle cx="178" cy="50" r="3.2"/><circle cx="240" cy="20" r="3.2"/><circle cx="302" cy="50" r="3.2"/>
+            <circle cx="188" cy="330" r="3.2"/><circle cx="292" cy="330" r="3.2"/>
+          </g>
         </svg>
 
-        <!-- Futuristic Telemetry Vector Callouts -->
-        <div class="scan-overlay-grid">
-          <div class="vector-node cyan-node node-heart" :class="{ 'detected': scanProgress > 25 }">
-            <span class="node-pulse cyan-pulse" />
-            <span class="node-label cyan-label">Heart Line &bull; Empathy Vector</span>
-          </div>
+        <!-- radial glow pulse -->
+        <div class="glow-div"></div>
 
-          <div class="vector-node cyan-node node-head" :class="{ 'detected': scanProgress > 50 }">
-            <span class="node-pulse cyan-pulse" />
-            <span class="node-label cyan-label">Head Line &bull; Analytical Vector</span>
-          </div>
+        <!-- Real captured palm image underlay if available -->
+        <img v-if="capturedPhotos[0]" :src="capturedPhotos[0]" alt="Captured Palm Underlay" class="palm-underlay-img" />
 
-          <div class="vector-node cyan-node node-life" :class="{ 'detected': scanProgress > 75 }">
-            <span class="node-pulse cyan-pulse" />
-            <span class="node-label cyan-label">Life Line &bull; 94% Vitality Index</span>
-          </div>
+        <!-- hand: outline + mesh fill + scanning line, all built from the same icon glyph -->
+        <div class="hand-wrap">
+          <i class="ti ti-hand-stop hand-outline" aria-hidden="true"></i>
+          <i class="ti ti-hand-stop hand-mesh" aria-hidden="true"></i>
+          <i class="ti ti-hand-stop hand-scanline" aria-hidden="true"></i>
 
-          <div class="vector-node cyan-node node-fate" :class="{ 'detected': scanProgress > 90 }">
-            <span class="node-pulse cyan-pulse" />
-            <span class="node-label cyan-label">Fate Line &bull; 2026 Shift</span>
+          <!-- Fallback SVG hand glyph if icon font is loading -->
+          <svg class="hand-fallback-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M8 13v-7.5a1.5 1.5 0 0 1 3 0v6.5 M11 11.5v-2a1.5 1.5 0 0 1 3 0v2 M14 10.5v-1.5a1.5 1.5 0 0 1 3 0v1.5 M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7l-3.7 -5.7a1 1 0 0 1 .15 -1.25a1 1 0 0 1 1.252 -.15l2.3 1.6v-8.5a1.5 1.5 0 0 1 3 0v7.5" stroke="#8fe8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+
+          <!-- Neural Network Callout Overlay Nodes -->
+          <div class="scan-overlay-grid">
+            <div class="vector-node cyan-node node-heart" :class="{ 'detected': scanProgress > 25 }">
+              <span class="node-pulse cyan-pulse" />
+              <span class="node-label cyan-label">Heart Line &bull; Empathy Vector</span>
+            </div>
+
+            <div class="vector-node cyan-node node-head" :class="{ 'detected': scanProgress > 50 }">
+              <span class="node-pulse cyan-pulse" />
+              <span class="node-label cyan-label">Head Line &bull; Analytical Vector</span>
+            </div>
+
+            <div class="vector-node cyan-node node-life" :class="{ 'detected': scanProgress > 75 }">
+              <span class="node-pulse cyan-pulse" />
+              <span class="node-label cyan-label">Life Line &bull; 94% Vitality Index</span>
+            </div>
+
+            <div class="vector-node cyan-node node-fate" :class="{ 'detected': scanProgress > 90 }">
+              <span class="node-pulse cyan-pulse" />
+              <span class="node-label cyan-label">Fate Line &bull; Destiny Shift</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Telemetry Diagnostics Console -->
-      <div class="telemetry-box cyan-telemetry">
-        <div class="telemetry-header">
-          <span class="pulse-dot cyan-dot" />
-          <span>CYAN NEURAL BIOMETRIC SCANNER</span>
-          <span class="percent cyan-percent">{{ Math.floor(scanProgress) }}%</span>
+        <div class="status-block scanner-font">
+          <span class="status-title">scanning palm</span>
+          <span class="status-sub">neural mesh — active</span>
         </div>
 
-        <p class="telemetry-log">{{ telemetryStatus }}</p>
+        <!-- Telemetry Diagnostics Bar -->
+        <div class="telemetry-box cyan-telemetry">
+          <div class="telemetry-header scanner-font">
+            <span class="pulse-dot cyan-dot" />
+            <span class="telemetry-log-text">{{ telemetryStatus }}</span>
+            <span class="percent cyan-percent">{{ Math.floor(scanProgress) }}%</span>
+          </div>
 
-        <div class="telemetry-progress-track">
-          <div class="telemetry-progress-fill cyan-fill" :style="{ width: scanProgress + '%' }" />
+          <div class="telemetry-progress-track">
+            <div class="telemetry-progress-fill cyan-fill" :style="{ width: scanProgress + '%' }" />
+          </div>
         </div>
+
       </div>
 
     </div>
@@ -718,84 +733,193 @@ function resetScan() {
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
 }
 
-/* ── Phase 2: Cyan Neural HUD Scanner (Palm Only) ────────────────────── */
+/* ── Phase 2: AI Palm Scanner (Neural Mesh Animation) ─────────────── */
+.scanner-font {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+@keyframes scanmove {
+  0%   { background-position-y: -120%; }
+  100% { background-position-y: 220%; }
+}
+
+@keyframes pulseglow {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 0.85; transform: scale(1.06); }
+}
+
 .scanning-container {
-  display: flex; flex-direction: column; gap: 1rem; flex: 1;
-}
-.scanner-viewport.cyan-hud {
-  position: relative; width: 100%; height: 380px;
-  border-radius: 1.25rem; overflow: hidden;
-  border: 1.5px solid rgba(6, 182, 212, 0.5);
-  box-shadow: 0 0 30px rgba(6, 182, 212, 0.25);
-}
-.scan-base-img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.15) brightness(0.85); }
-
-.laser-beam.cyan-beam {
-  position: absolute; left: 0; right: 0; height: 3px;
-  background: #00f2fe;
-  box-shadow: 0 0 15px #06b6d4, 0 0 30px #00f2fe;
-  z-index: 25;
-  animation: laserScan 2.2s ease-in-out infinite alternate;
-}
-@keyframes laserScan {
-  0% { top: 8%; }
-  100% { top: 90%; }
+  display: flex; flex-direction: column; gap: 1rem; flex: 1; align-items: center; justify-content: center;
 }
 
-.holo-ring {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 220px; height: 220px; border-radius: 50%;
-  border: 1.5px stroke-dasharray="10 5" rgba(0,242,254,0.4);
-  border: 1.5px dashed rgba(6,182,212,0.4);
-  pointer-events: none; z-index: 15;
+.scanner-card {
+  background: #12151c;
+  border-radius: 16px;
+  padding: 1.75rem 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(143, 232, 255, 0.25);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.65), 0 0 35px rgba(79, 216, 255, 0.18);
+  box-sizing: border-box;
 }
 
-.neural-network-svg {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 18;
-}
-.neural-node.pulse-node {
-  animation: pulseNode 1.5s ease-in-out infinite alternate;
-}
-@keyframes pulseNode {
-  0% { transform: scale(1); filter: drop-shadow(0 0 4px #00f2fe); }
-  100% { transform: scale(1.4); filter: drop-shadow(0 0 10px #00f2fe); }
+.circuit-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
-.scan-overlay-grid { position: absolute; inset: 0; z-index: 20; }
+.glow-div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 250px;
+  height: 250px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(79,216,255,0.85) 0%,
+    rgba(31,111,191,0.4) 45%,
+    rgba(18,21,28,0) 75%);
+  animation: pulseglow 2.6s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.palm-underlay-img {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px; height: 220px;
+  object-fit: cover;
+  border-radius: 50%;
+  opacity: 0.25;
+  mix-blend-mode: screen;
+  z-index: 1;
+  pointer-events: none;
+  filter: contrast(1.2) brightness(0.9);
+}
+
+.hand-wrap {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hand-wrap i {
+  position: absolute;
+  font-size: 210px;
+  line-height: 1;
+  color: transparent;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.hand-outline {
+  -webkit-text-stroke: 2px #8fe8ff;
+  text-stroke: 2px #8fe8ff;
+}
+
+.hand-mesh {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(143,232,255,0.55) 0px, rgba(143,232,255,0.55) 1px, transparent 1px, transparent 11px),
+    repeating-linear-gradient(90deg, rgba(143,232,255,0.45) 0px, rgba(143,232,255,0.45) 1px, transparent 1px, transparent 11px);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+.hand-scanline {
+  background-image: linear-gradient(180deg,
+    transparent 0%, transparent 44%,
+    rgba(220,250,255,0.95) 50%,
+    transparent 56%, transparent 100%);
+  background-size: 100% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: scanmove 2.4s linear infinite;
+}
+
+.hand-fallback-svg {
+  position: absolute;
+  width: 170px; height: 170px;
+  pointer-events: none;
+  opacity: 0.35;
+  filter: drop-shadow(0 0 8px rgba(143,232,255,0.6));
+}
+
+.status-block {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  text-align: center;
+}
+
+.status-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #DFFBFC;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.status-sub {
+  font-size: 11px;
+  color: rgba(94,234,240,0.68);
+}
+
+.scan-overlay-grid { position: absolute; inset: 0; z-index: 20; pointer-events: none; }
 .vector-node.cyan-node {
   position: absolute; display: flex; align-items: center; gap: 0.4rem;
   opacity: 0; transition: opacity 0.4s ease;
 }
 .vector-node.cyan-node.detected { opacity: 1; }
-.node-heart { top: 30%; left: 12%; }
-.node-head  { top: 48%; left: 18%; }
-.node-life  { top: 68%; left: 32%; }
-.node-fate  { top: 55%; left: 52%; }
+.node-heart { top: 22%; left: 5%; }
+.node-head  { top: 44%; left: 10%; }
+.node-life  { top: 66%; left: 24%; }
+.node-fate  { top: 52%; right: 5%; }
 
 .node-pulse.cyan-pulse {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: #00f2fe; box-shadow: 0 0 12px #00f2fe;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #00f2fe; box-shadow: 0 0 10px #00f2fe; flex-shrink: 0;
 }
 .node-label.cyan-label {
-  font-size: 0.6rem; font-weight: 700; color: #f1f5f9;
-  background: rgba(9, 14, 26, 0.88); padding: 2px 7px; border-radius: 4px;
-  border: 1px solid rgba(6, 182, 212, 0.4);
+  font-size: 0.58rem; font-weight: 700; color: #f1f5f9;
+  background: rgba(9, 14, 26, 0.92); padding: 2px 6px; border-radius: 4px;
+  border: 1px solid rgba(6, 182, 212, 0.4); white-space: nowrap;
 }
 
 .telemetry-box.cyan-telemetry {
-  background: rgba(9, 14, 26, 0.88); border: 1px solid rgba(6, 182, 212, 0.35);
-  border-radius: 1rem; padding: 0.85rem;
+  position: relative; z-index: 2; width: 100%;
+  background: rgba(9, 14, 26, 0.9); border: 1px solid rgba(6, 182, 212, 0.35);
+  border-radius: 0.85rem; padding: 0.75rem 0.85rem; box-sizing: border-box;
 }
 .telemetry-header {
-  display: flex; align-items: center; gap: 0.5rem; font-size: 0.65rem; font-weight: 800; color: #22d3ee;
+  display: flex; align-items: center; gap: 0.5rem; font-size: 0.65rem; font-weight: 700; color: #22d3ee;
+  margin-bottom: 0.5rem;
 }
-.pulse-dot.cyan-dot { width: 6px; height: 6px; border-radius: 50%; background: #00f2fe; box-shadow: 0 0 8px #00f2fe; }
-.percent.cyan-percent { margin-left: auto; color: #00f2fe; }
+.telemetry-log-text {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.64rem;
+}
+.pulse-dot.cyan-dot { width: 6px; height: 6px; border-radius: 50%; background: #00f2fe; box-shadow: 0 0 8px #00f2fe; flex-shrink: 0; }
+.percent.cyan-percent { color: #00f2fe; font-weight: 800; font-size: 0.72rem; }
 
-.telemetry-log {
-  font-family: monospace; font-size: 0.68rem; color: #e2e8f0; margin: 0.4rem 0; min-height: 1.2rem;
-}
 .telemetry-progress-track {
   width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden;
 }

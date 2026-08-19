@@ -4,31 +4,34 @@
     <!-- Scrollable area: header + suggestions + messages -->
     <div class="ai-scroll-area">
 
-      <!-- ── Header Banner ─────────────────────────────────────────────── -->
+      <!-- ── Sleek Compact Low-Height Header Banner ─────────────────────────────── -->
       <header class="ai-header">
-        <div class="ai-avatar-ring">
-          <div class="ai-avatar">✨</div>
-          <span class="ai-pulse-dot" />
+        <!-- Glowing Orbit Avatar Ring -->
+        <div class="ai-avatar-wrap">
+          <div class="ai-avatar-orbit-ring" />
+          <div class="ai-avatar-core">
+            <span class="ai-avatar-emoji">🔮</span>
+          </div>
+          <span class="ai-pulse-dot" title="Astro AI Online" />
         </div>
 
         <div class="ai-title-box">
-          <span class="ai-badge"><span class="sparkle">✦</span> ASTRO AI 2.0</span>
-          <h1 class="ai-title">Cosmic Intelligence</h1>
-          <p class="ai-subtitle">Ask horoscopes, transits, Kundli &amp; remedies</p>
+          <div class="ai-title-row">
+            <h1 class="ai-title">Cosmic AI</h1>
+            <span class="ai-badge">✦ 2.0</span>
+          </div>
+          <p class="ai-subtitle">Horoscopes • Transits • Kundli</p>
         </div>
 
-        <!-- Astro Live Voice Mode Button (Right Side) -->
+        <!-- Astro Live Voice Mode Trigger Button -->
         <button class="live-voice-trigger" @click="startLiveVoiceMode" title="Start Astro Live Voice Session">
           <span class="red-live-dot" />
-          <svg class="wave-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-            stroke-linecap="round">
-            <line x1="4" y1="10" x2="4" y2="14" />
-            <line x1="8" y1="6" x2="8" y2="18" />
-            <line x1="12" y1="3" x2="12" y2="21" />
-            <line x1="16" y1="7" x2="16" y2="17" />
-            <line x1="20" y1="10" x2="20" y2="14" />
-          </svg>
-          <span>Astro Live</span>
+          <div class="live-wave-bars">
+            <span class="bar bar-1" />
+            <span class="bar bar-2" />
+            <span class="bar bar-3" />
+          </div>
+          <span class="live-btn-text">Live Voice</span>
         </button>
       </header>
 
@@ -567,171 +570,195 @@ onUnmounted(() => {
   display: none;
 }
 
-/* ── Header Banner ───────────────────────────────────────────────── */
+/* ── Sleek Compact Low-Height Header Banner ─────────────────────────────── */
 .ai-header {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(30, 15, 60, 0.8) 0%, rgba(10, 20, 45, 0.9) 100%);
-  border: 1px solid rgba(147, 51, 234, 0.3);
-  border-radius: 1.25rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 15px rgba(168, 85, 247, 0.15);
-  margin-bottom: 0.85rem;
+  gap: 0.6rem;
+  padding: 0.45rem 0.75rem;
+  background: linear-gradient(135deg, rgba(23, 14, 48, 0.9) 0%, rgba(13, 20, 48, 0.95) 100%);
+  border: 1px solid rgba(192, 132, 252, 0.28);
+  border-radius: 0.9rem;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 12px rgba(168, 85, 247, 0.12);
+  margin-bottom: 0.55rem;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  min-height: 44px;
 }
 
-.ai-avatar-ring {
+/* Glowing Orbit Avatar Wrap */
+.ai-avatar-wrap {
   position: relative;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: conic-gradient(#c084fc, #818cf8, #38bdf8, #c084fc);
-  padding: 2px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
-}
-
-@keyframes rotateGlow {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.ai-avatar {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: #0f172a;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+}
+
+.ai-avatar-orbit-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #c084fc, #38bdf8, #fbbf24, #c084fc);
+  animation: rotateOrbit 4s linear infinite;
+  opacity: 0.9;
+}
+
+@keyframes rotateOrbit {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ai-avatar-core {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1e1138 0%, #0b071a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  z-index: 2;
+}
+
+.ai-avatar-emoji {
+  font-size: 1.05rem;
+  filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8));
 }
 
 .ai-pulse-dot {
   position: absolute;
-  bottom: 2px;
-  right: 2px;
-  width: 10px;
-  height: 10px;
+  bottom: -1px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #4ade80;
-  border: 2px solid #0f172a;
-  box-shadow: 0 0 8px #4ade80;
+  border: 1.5px solid #0d1430;
+  box-shadow: 0 0 6px #4ade80;
+  z-index: 3;
 }
 
+/* Title Box */
 .ai-title-box {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 0;
+  justify-content: center;
+}
+
+.ai-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.ai-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, #e9d5ff 50%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
 }
 
 .ai-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.6rem;
+  font-size: 0.52rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   color: #fbbf24;
-  background: rgba(251, 191, 36, 0.12);
-  padding: 0.15rem 0.5rem;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  padding: 0.08rem 0.38rem;
   border-radius: 999px;
-  width: fit-content;
-  margin-bottom: 0.2rem;
+  white-space: nowrap;
 }
 
-.sparkle {
-  color: #fbbf24;
-  animation: pulse 1.5s ease-in-out infinite;
+.ai-subtitle {
+  font-size: 0.6rem;
+  color: rgba(226, 232, 240, 0.6);
+  margin-top: 0.08rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Astro Live Voice Mode Trigger - Placed on the Right Side */
+/* Sleek Compact Live Voice Button */
 .live-voice-trigger {
+  position: relative;
   margin-left: auto;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  color: #ffffff;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(56, 189, 248, 0.25) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.45);
-  padding: 0.35rem 0.65rem;
+  gap: 0.3rem;
+  padding: 0.28rem 0.55rem;
   border-radius: 999px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(168, 85, 247, 0.25) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #ffffff;
   cursor: pointer;
-  box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+  z-index: 2;
+  box-shadow: 0 2px 10px rgba(239, 68, 68, 0.25);
   transition: all 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .live-voice-trigger:hover {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.35) 0%, rgba(56, 189, 248, 0.4) 100%);
-  border-color: rgba(239, 68, 68, 0.7);
-  box-shadow: 0 0 18px rgba(239, 68, 68, 0.45);
   transform: translateY(-1px);
+  border-color: rgba(239, 68, 68, 0.8);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
 }
 
 .red-live-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #ef4444;
-  box-shadow: 0 0 8px #ef4444;
+  box-shadow: 0 0 6px #ef4444;
   animation: redPulse 1.2s ease-in-out infinite;
   flex-shrink: 0;
 }
 
 @keyframes redPulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: scale(1.4);
-    opacity: 0.6;
-  }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
 }
 
-.wave-svg {
-  width: 14px;
-  height: 14px;
-  color: #38bdf8;
-  flex-shrink: 0;
-  animation: waveBars 1.5s ease-in-out infinite alternate;
+.live-wave-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5px;
+  height: 11px;
 }
 
-@keyframes waveBars {
-  0% {
-    transform: scaleY(0.85);
-  }
-
-  100% {
-    transform: scaleY(1.15);
-  }
+.live-wave-bars .bar {
+  width: 2px;
+  background: #38bdf8;
+  border-radius: 1px;
+  animation: barEqualizer 1s ease-in-out infinite alternate;
 }
 
-.ai-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.15rem;
+.bar-1 { height: 50%; animation-delay: 0.1s; }
+.bar-2 { height: 100%; animation-delay: 0.3s; }
+.bar-3 { height: 70%; animation-delay: 0.2s; }
+
+@keyframes barEqualizer {
+  0% { transform: scaleY(0.4); }
+  100% { transform: scaleY(1); }
+}
+
+.live-btn-text {
+  font-size: 0.62rem;
   font-weight: 800;
-  color: #f3f4f6;
-  line-height: 1.1;
-}
-
-.ai-subtitle {
-  font-size: 0.68rem;
-  color: rgba(226, 232, 240, 0.6);
-  margin-top: 0.15rem;
+  letter-spacing: 0.02em;
 }
 
 /* ── Suggestions Section (Smooth Horizontal Scrollable) ─────────── */
