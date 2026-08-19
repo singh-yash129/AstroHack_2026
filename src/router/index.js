@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+﻿import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
@@ -54,6 +54,21 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0, left: 0 }
+  },
+})
+
+router.afterEach(() => {
+  // Reset the inner scrollable container (.app-content) as well as window
+  window.scrollTo(0, 0)
+  const appContent = document.querySelector('.app-content')
+  if (appContent) {
+    appContent.scrollTop = 0
+  }
 })
 
 export default router

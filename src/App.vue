@@ -1,8 +1,8 @@
-<template>
+﻿<template>
   <div class="app-shell">
 
     <!-- Scrollable content -->
-    <main class="app-content" :class="{ 'app-content--no-nav': !showNav }">
+    <main ref="contentRef" class="app-content" :class="{ 'app-content--no-nav': !showNav }">
       <RouterView v-slot="{ Component, route }">
         <Transition name="fade" mode="out-in">
           <component :is="Component" :key="route.name" />
@@ -10,7 +10,7 @@
       </RouterView>
     </main>
 
-    <!-- Bottom nav — flex sibling, always at bottom of shell -->
+    <!-- Bottom nav - flex sibling, always at bottom of shell -->
     <nav v-if="showNav" class="bottom-nav" role="navigation" aria-label="Main navigation">
       <RouterLink
         v-for="item in navItems"
@@ -32,14 +32,28 @@
 </template>
 
 <script setup>
-import { computed, h } from 'vue'
+import { computed, h, ref, watch, nextTick } from 'vue'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 
 const route        = useRoute()
 const currentRoute = computed(() => route.path)
 const showNav      = computed(() => !route.meta.hideNav)
+const contentRef   = ref(null)
 
-// ── SVG icon components ──────────────────────────────────────────────────
+// Reset scroll position on route change
+watch(
+  () => route.fullPath,
+  () => {
+    nextTick(() => {
+      if (contentRef.value) {
+        contentRef.value.scrollTop = 0
+      }
+      window.scrollTo(0, 0)
+    })
+  }
+)
+
+// ── SVG icon components ─────────────────────────────────────────────
 
 const IconTimeline = {
   name: 'IconTimeline',
@@ -100,7 +114,7 @@ const navItems = [
   background: transparent;
 }
 
-/* ── Scrollable main area ─────────────────────────────────────────────── */
+/* ── Scrollable main area ── */
 .app-content {
   flex: 1;
   overflow-y: auto;
@@ -117,7 +131,7 @@ const navItems = [
   flex-direction: column;
 }
 
-/* ── Bottom nav — flex item at bottom, no fixed/absolute needed ───────── */
+/* ── Bottom nav - flex item at bottom, no fixed/absolute needed ── */
 .bottom-nav {
   flex-shrink: 0;
   width: 100%;
@@ -137,7 +151,7 @@ const navItems = [
   padding: 0 0.5rem;
 }
 
-/* ── Nav items ────────────────────────────────────────────────────────── */
+/* ── Nav items ── */
 .nav-item {
   position: relative;
   display: flex;
@@ -191,7 +205,7 @@ const navItems = [
 }
 .nav-item--active .nav-label { opacity: 1; font-weight: 600; }
 
-/* ── Page transition ──────────────────────────────────────────────────── */
+/* ── Page transition ── */
 .fade-enter-active,
 .fade-leave-active { transition: opacity 0.2s ease, transform 0.2s ease; }
 .fade-enter-from   { opacity: 0; transform: translateY(5px); }
